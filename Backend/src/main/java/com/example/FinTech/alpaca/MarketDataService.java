@@ -32,12 +32,12 @@ public class MarketDataService {
             StockBarsRespSingle response = alpacaAPI.marketData().stock().stockBarSingle("AAPL", "1Day", startDateTime, endDateTime, null, null, null, null, null, null, null);
             if (response.getBars() != null) {
                     response.getBars().forEach(bar -> {
-                        System.out.println("Date: " + bar.getT()
+/*                         System.out.println("Date: " + bar.getT()
                                 + " Open: " + bar.getO()
                                 + " Close: " + bar.getC()
                                 + " High: " + bar.getH()
                                 + " Low: " + bar.getL()
-                                + " Volume: " + bar.getV());
+                                + " Volume: " + bar.getV()); */
                     });
             } else {
                 System.out.println("Keine Bars erhalten.");
