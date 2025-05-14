@@ -1,21 +1,31 @@
 package com.example.FinTech.alpaca;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
 
 import net.jacobpeterson.alpaca.model.util.apitype.MarketDataWebsocketSourceType;
 import net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType;
 
-@Component
+@Configuration
+@ConfigurationProperties(prefix = "alpaca")
 public class AlpacaConfig {
 
-    @Value("${alpaca.api.key}")
-    public static final String API_KEY_ID = "your_key_id";
+    private String apiKey;
+    private String apiSecret;
 
-    @Value("${alpaca.api.secret}")
-    public static final String API_SECRET_KEY = "your_secret_key";
+    // Getter und Setter
+    public String getApiKey() { 
+        System.out.println(apiKey);
+        return apiKey; 
+    }
+    public void setApiKey(String apiKey) { this.apiKey = apiKey; }
+    public String getApiSecret() { return apiSecret; }
+    public void setApiSecret(String apiSecret) { this.apiSecret = apiSecret; }
+
+    
 
     public static final TraderAPIEndpointType endpointType = TraderAPIEndpointType.PAPER;
-    
+
     public static final MarketDataWebsocketSourceType sourceType = MarketDataWebsocketSourceType.IEX;
 }
