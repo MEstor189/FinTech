@@ -25,7 +25,7 @@ public class MarketDataStartupRunner implements CommandLineRunner {
 
         System.out.println("Starte MarketData Abruf...");
         // Hier rufst du deine Methode auf
-        marketDataService.getDailyBars();
+        marketDataService.getAndSaveAllBars();
         
         System.out.println("MarketData Abruf abgeschlossen!");
     }
