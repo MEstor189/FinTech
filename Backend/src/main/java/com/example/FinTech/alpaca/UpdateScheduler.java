@@ -13,8 +13,8 @@ public class UpdateScheduler {
         this.marketDataService = marketDataService;
     }
 
-/*     @Scheduled(cron = "0 0 22 * * ?")
+    @Scheduled(cron = "0 0 22 * * ?")
     public void checkForNewData() {
-        marketDataService.getDailyBars();
-    } */
+        marketDataService.updateAndSaveNewBars("AAPL");
+    } 
 }

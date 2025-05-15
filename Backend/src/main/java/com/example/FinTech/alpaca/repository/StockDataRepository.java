@@ -20,4 +20,7 @@ public interface StockDataRepository extends JpaRepository<StockData, StockDataI
 
     // einen Tag ein Symbol
     Optional<StockData> findBySymbolAndTradeDate(String symbol, LocalDate tradeDate);
+
+    Optional<StockData> findTopBySymbolOrderByTradeDateDesc(String symbol);
+
 }
