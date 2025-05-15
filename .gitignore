@@ -1,0 +1,75 @@
+# === Backend ===
+
+# Maven target und andere Build-Dateien
+/backend/target/
+!backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# STS (Spring Tool Suite) Dateien
+/backend/.apt_generated
+/backend/.classpath
+/backend/.factorypath
+/backend/.project
+/backend/.settings
+/backend/.springBeans
+/backend/.sts4-cache
+
+# IntelliJ IDEA spezifische Dateien
+/backend/.idea
+/backend/*.iws
+/backend/*.iml
+/backend/*.ipr
+
+# NetBeans spezifische Dateien
+/backend/nbproject/private/
+/backend/nbbuild/
+/backend/dist/
+/backend/nbdist/
+/backend/.nb-gradle/
+/backend/build/
+/backend/!**/src/main/**/build/
+/backend/!**/src/test/**/build/
+
+# === Frontend ===
+
+# Log-Dateien
+/frontend/logs
+/frontend/*.log
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/pnpm-debug.log*
+/frontend/lerna-debug.log*
+
+# Node Modules und Build-Dateien
+/frontend/node_modules
+/frontend/dist
+/frontend/dist-ssr
+/frontend/*.local
+
+# Editor-spezifische Dateien (VS Code, IntelliJ, etc.)
+/frontend/.vscode/
+/frontend!.vscode/extensions.json
+/frontend/.idea
+/frontend/.DS_Store
+/frontend/*.suo
+/frontend/*.ntvs*
+/frontend/*.njsproj
+/frontend/*.sln
+/frontend/*.sw?
+
+# === Allgemein ===
+
+# Betriebssystem-spezifische Dateien
+.DS_Store
+
+# Andere Build-Verzeichnisse, die ignoriert werden sollen
+/node_modules
+/dist
+
+# Umgebungsdateien
+*.env
+
+# Dateien von Visual Studio Code ignorieren
+.vscode/
