@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.FinTech.alpaca.entity.StockData;
@@ -18,6 +20,8 @@ import net.jacobpeterson.alpaca.openapi.marketdata.model.StockBarsRespSingle;
 
 @Service
 public class MarketDataService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MarketDataService.class);
 
     private AlpacaAPI alpacaAPI;
     private final AlpacaClientFactory alpacaClientFactory;
@@ -54,12 +58,12 @@ public class MarketDataService {
                 });
 
                 stockDataRepository.saveAll(stockDataList);
-                System.out.println(stockDataList.size() + " Bars saved in MySQL.");
+                logger.info(stockDataList.size() + " Bars saved in MySQL.");
             } else {
-                System.out.println("No Bars.");
+                logger.warn("No Bars.");
             }
         } catch (Exception e) {
-            System.out.println("exeption:" + e);
+            logger.error("exeption:" + e);
         }
     }
 
@@ -76,7 +80,7 @@ public class MarketDataService {
             }
             LocalDate today = LocalDate.now();
             if (!startDate.isBefore(today)) {
-                System.out.println("🔎 No new data to update for " + symbol);
+                logger.info("🔎 No new data to update for " + symbol);
                 return;
             }
 
@@ -101,14 +105,14 @@ public class MarketDataService {
                 });
 
                 stockDataRepository.saveAll(newBars);
-                System.out.println(newBars.size() + " Bars saved in MySQL.");
+                logger.info(newBars.size() + " Bars saved in MySQL.");
             } else {
-                System.out.println("No Bars.");
+                logger.warn("No Bars.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Error while updating data for " + symbol);
+            logger.error("❌ Error while updating data for " + symbol);
         }
     }
 }

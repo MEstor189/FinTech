@@ -1,5 +1,7 @@
 package com.example.FinTech.startup;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import com.example.FinTech.alpaca.MarketDataService;
 public class MarketDataStartupRunner implements CommandLineRunner {
 
     private final MarketDataService marketDataService;
+    private static final Logger logger = LoggerFactory.getLogger(MarketDataStartupRunner.class);
 
 
     public MarketDataStartupRunner(MarketDataService marketDataService) {
@@ -21,12 +24,10 @@ public class MarketDataStartupRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        logger.info("Starte MarketData Abruf...");
 
-
-        System.out.println("Starte MarketData Abruf...");
-        // Hier rufst du deine Methode auf
         marketDataService.getAndSaveAllBars();
         
-        System.out.println("MarketData Abruf abgeschlossen!");
+        logger.info("MarketData Abruf abgeschlossen!");
     }
 }
