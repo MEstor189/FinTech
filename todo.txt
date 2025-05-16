@@ -1,0 +1,13 @@
+Backend Engine:
+
+1. Strategien-> Interface -> vordefinierte Strategien
+
+2. Hilfsmethoden für Prozentberechnung, Kursvergleich, etc.
+
+Rest-Anbindung:
+3. Controller (endpoints)
+4. DTOs
+
+5. erste Tests
+
+Nebenbei: Notizen für Dokumentation später
