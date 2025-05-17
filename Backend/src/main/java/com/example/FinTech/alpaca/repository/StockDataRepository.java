@@ -15,8 +15,8 @@ public interface StockDataRepository extends JpaRepository<StockData, StockDataI
     // alle Daten ein Symbol
     List<StockData> findAllBySymbol(String symbol);
 
-    // alle Daten ein Symbol innerhalb Zeitraum
-    List<StockData> findAllBySymbolAndTradeDateBetween(String symbol, LocalDate startDate, LocalDate endDate);
+    // alle Daten ein Symbol innerhalb Zeitraum ASC
+    List<StockData> findAllBySymbolAndTradeDateBetweenOrderByTradeDateAsc(String symbol, LocalDate startDate, LocalDate endDate);
 
     // einen Tag ein Symbol
     Optional<StockData> findBySymbolAndTradeDate(String symbol, LocalDate tradeDate);

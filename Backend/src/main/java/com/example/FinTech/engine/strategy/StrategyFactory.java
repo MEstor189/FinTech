@@ -1,7 +1,6 @@
 package com.example.FinTech.engine.strategy;
 
 import com.example.FinTech.alpaca.entity.StockData;
-import com.example.FinTech.engine.model.Portfolio;
 
 import java.time.LocalDate;
 import java.util.Map;
