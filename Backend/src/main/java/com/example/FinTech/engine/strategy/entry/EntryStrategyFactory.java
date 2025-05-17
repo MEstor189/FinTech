@@ -17,8 +17,14 @@ public class EntryStrategyFactory {
                 double dipThreshold = params.getOrDefault("dipThreshold", 3.0);
                 return new BuyTheDipEntry(historicalData, dipThreshold);
 
-            // case MOMENTUM:
-            //     return new MomentumEntryStrategy(...);
+            case MOMENTUM:
+                int days = params.getOrDefault("daysInARow", 3.0).intValue();
+                return new MomentumEntry(historicalData, days);
+
+            case MOVING_AVERAGE:
+                int shortPeriod = params.getOrDefault("shortPeriod", 5.0).intValue();
+                int longPeriod = params.getOrDefault("longPeriod", 20.0).intValue();
+                return new MovingAverageEntry(historicalData, shortPeriod,longPeriod);
 
             default:
                 throw new IllegalArgumentException("Unsupported Entry Strategy: " + type);
