@@ -1,13 +1,16 @@
 Backend Engine:
 
-1. vordefinierte Strategien:    MOMENTUM,
-                                MOVING_AVERAGE
+1. exit kriterien erstellen
 
-2. Hilfsmethoden für Prozentberechnung, Kursvergleich, etc.
+
+ (Hilfsmethoden für Prozentberechnung, Kursvergleich, etc.)
 
 Frontend:
 
 1. Layout
+
+
+Note: Im Frontend werden dann die entry & exit strategien prebuild für die vordefinierten strategien
 
 
 Nebenbei: Notizen für Dokumentation später
