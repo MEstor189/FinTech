@@ -1,9 +1,10 @@
 package com.example.FinTech.dto;
 
-import com.example.FinTech.engine.strategy.StrategyType;
-
 import java.time.LocalDate;
 import java.util.Map;
+
+import com.example.FinTech.engine.strategy.entry.EntryStrategyType;
+import com.example.FinTech.engine.strategy.exit.ExitStrategyType;
 
 public class SimulationRequest {
 
@@ -11,8 +12,42 @@ public class SimulationRequest {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private StrategyType strategyType;
-    private Map<String, Double> params;  
+    private EntryStrategyType entryStrategyType;
+    private ExitStrategyType exitStrategyType;
+    private Map<String, Double> entryParams;
+    private Map<String, Double> exitParams;
+    public EntryStrategyType getEntryStrategyType() {
+        return entryStrategyType;
+    }
+
+    public void setEntryStrategyType(EntryStrategyType entryStrategyType) {
+        this.entryStrategyType = entryStrategyType;
+    }
+
+    public ExitStrategyType getExitStrategyType() {
+        return exitStrategyType;
+    }
+
+    public void setExitStrategyType(ExitStrategyType exitStrategyType) {
+        this.exitStrategyType = exitStrategyType;
+    }
+
+    public Map<String, Double> getEntryParams() {
+        return entryParams;
+    }
+
+    public void setEntryParams(Map<String, Double> entryParams) {
+        this.entryParams = entryParams;
+    }
+
+    public Map<String, Double> getExitParams() {
+        return exitParams;
+    }
+
+    public void setExitParams(Map<String, Double> exitParams) {
+        this.exitParams = exitParams;
+    }
+
     private double investmentPerTrade;
 
     public SimulationRequest() {
@@ -40,22 +75,6 @@ public class SimulationRequest {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public StrategyType getStrategyType() {
-        return strategyType;
-    }
-
-    public void setStrategyType(StrategyType strategyType) {
-        this.strategyType = strategyType;
-    }
-
-    public Map<String, Double> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Double> params) {
-        this.params = params;
     }
 
     public double getInvestmentPerTrade() {

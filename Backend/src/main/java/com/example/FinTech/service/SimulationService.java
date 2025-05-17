@@ -5,8 +5,10 @@ import com.example.FinTech.alpaca.repository.StockDataRepository;
 import com.example.FinTech.dto.SimulationRequest;
 import com.example.FinTech.engine.SimulationEngine;
 import com.example.FinTech.engine.model.SimulationResult;
-import com.example.FinTech.engine.strategy.Strategy;
-import com.example.FinTech.engine.strategy.StrategyFactory;
+import com.example.FinTech.engine.strategy.entry.EntryStrategy;
+import com.example.FinTech.engine.strategy.entry.EntryStrategyFactory;
+import com.example.FinTech.engine.strategy.exit.ExitStrategy;
+import com.example.FinTech.engine.strategy.exit.ExitStrategyFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,35 +29,40 @@ public class SimulationService {
     }
 
     public SimulationResult runSimulation(SimulationRequest request) {
-        logger.info("Starting simulation for symbol {} using strategy {}", request.getSymbol(), request.getStrategyType());
+        logger.info("Starting simulation for symbol {} using EntryStrategy {} and ExitStrategy {}", request.getSymbol(),
+                request.getEntryStrategyType(),request.getExitStrategyType());
 
         // 1. get data from DB
         List<StockData> dataList = stockDataRepository.findAllBySymbolAndTradeDateBetweenOrderByTradeDateAsc(
                 request.getSymbol(),
                 request.getStartDate(),
-                request.getEndDate()
-        );
+                request.getEndDate());
 
         if (dataList.isEmpty()) {
-            logger.warn("No stock data found for {} between {} and {}", request.getSymbol(), request.getStartDate(), request.getEndDate());
+            logger.warn("No stock data found for {} between {} and {}", request.getSymbol(), request.getStartDate(),
+                    request.getEndDate());
             throw new IllegalArgumentException("No data available for the selected period and symbol.");
         }
 
-        // 2. Data in Map<LocalDate, StockData> 
+        // 2. Data in Map<LocalDate, StockData>
         Map<LocalDate, StockData> historicalData = new HashMap<>();
         for (StockData data : dataList) {
             historicalData.put(data.getTradeDate(), data);
         }
 
-        // 3. create strategie w enum & Factory
-        Strategy strategy = StrategyFactory.createStrategy(
-                request.getStrategyType(),
+        // 3. create Entrystrategie w enum & Factory
+        EntryStrategy entryStrategy = EntryStrategyFactory.createEntryStrategy(
+                request.getEntryStrategyType(),
                 historicalData,
-                request.getParams() != null ? request.getParams() : new HashMap<>()
-        );
+                request.getEntryParams() != null ? request.getEntryParams() : new HashMap<>());
+
+        ExitStrategy exitStrategy = ExitStrategyFactory.createExitStrategy(
+                request.getExitStrategyType(),
+                historicalData,
+                request.getExitParams() != null ? request.getExitParams() : new HashMap<>());
 
         // 4. SimulationEngine start
-        SimulationEngine engine = new SimulationEngine(strategy, request.getInvestmentPerTrade());
+        SimulationEngine engine = new SimulationEngine(entryStrategy, exitStrategy, request.getInvestmentPerTrade());
         SimulationResult result = engine.runSimulation(dataList);
 
         logger.info("Simulation completed. Trades executed: {}", result.getTradeCount());

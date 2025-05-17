@@ -22,8 +22,8 @@ public class SimulationController {
 
     @PostMapping
     public SimulationResponse runSimulation(@RequestBody SimulationRequest request) {
-        logger.info("POST /api/simulation called for symbol {} with strategy {}", request.getSymbol(),
-                request.getStrategyType());
+        logger.info("POST /api/simulation called for symbol {} with EntryStrategy {} and ExitStrategy {}", request.getSymbol(),
+                request.getEntryStrategyType(),request.getExitStrategyType());
 
         SimulationResult result = simulationService.runSimulation(request);
 

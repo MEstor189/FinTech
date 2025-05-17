@@ -1,7 +1,4 @@
-package com.example.FinTech.engine.strategy;
-
-import com.example.FinTech.engine.model.Portfolio;
-import com.example.FinTech.alpaca.entity.StockData;
+package com.example.FinTech.engine.strategy.entry;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,21 +8,19 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BuyTheDip implements Strategy {
+import com.example.FinTech.alpaca.entity.StockData;
 
-    private static final Logger logger = LoggerFactory.getLogger(BuyTheDip.class);
+public class BuyTheDipEntry implements EntryStrategy{
+
+        private static final Logger logger = LoggerFactory.getLogger(BuyTheDipEntry.class);
 
     private final Map<LocalDate, StockData> historicalData;
     private final double dipThresholdPercent; // z. B. 3.0 = -3%
-    private final double profitTargetPercent; // z. B. 5.0 = +5%
-
-    public BuyTheDip(Map<LocalDate, StockData> historicalData,
-            double dipThresholdPercent,
-            double profitTargetPercent) {
+    public BuyTheDipEntry(Map<LocalDate, StockData> historicalData, double dipThresholdPercent) {
         this.historicalData = historicalData;
         this.dipThresholdPercent = dipThresholdPercent;
-        this.profitTargetPercent = profitTargetPercent;
     }
+    
 
     @Override
     public boolean shouldEnter(StockData today) {
@@ -51,20 +46,5 @@ public class BuyTheDip implements Strategy {
         }else{
             return false;
         }
-    }
-
-    @Override
-    public boolean shouldExit(StockData today, Portfolio portfolio) {
-        return portfolio.getOpenPositions().stream().anyMatch(pos -> {
-            if (!pos.getSymbol().equals(today.getSymbol()))
-                return false;
-
-            double entry = pos.getEntryPrice();
-            double current = today.getClosePrice().doubleValue();
-            double change = ((current - entry) / entry) * 100.0;
-            logger.debug("Sell signal: {} reached {:.2f}% profit on {}", pos.getSymbol(), change, today.getTradeDate());
-
-            return change >= profitTargetPercent;
-        });
     }
 }

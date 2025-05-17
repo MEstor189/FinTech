@@ -3,7 +3,9 @@ package com.example.FinTech.engine;
 import com.example.FinTech.alpaca.entity.StockData;
 
 import com.example.FinTech.engine.model.*;
-import com.example.FinTech.engine.strategy.Strategy;
+import com.example.FinTech.engine.strategy.entry.EntryStrategy;
+import com.example.FinTech.engine.strategy.exit.ExitStrategy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,19 +17,21 @@ public class SimulationEngine {
 
     private static final Logger logger = LoggerFactory.getLogger(SimulationEngine.class);
 
-    private final Strategy strategy;
+    private final EntryStrategy entryStrategy;
+    private final ExitStrategy exitStrategy;
     private final double investmentPerTrade;
 
     private final Portfolio portfolio = new Portfolio();
     private final List<Trade> tradeHistory = new ArrayList<>();
 
-    public SimulationEngine(Strategy strategy, double investmentPerTrade) {
-        this.strategy = strategy;
+    public SimulationEngine(EntryStrategy entryStrategy, ExitStrategy exitStrategy, double investmentPerTrade) {
+        this.entryStrategy = entryStrategy;
+        this.exitStrategy=exitStrategy;
         this.investmentPerTrade = investmentPerTrade;
     }
 
     public SimulationResult runSimulation(List<StockData> stockDataList) {
-        logger.info("Simulation started using strategy: {}", strategy.getClass().getSimpleName());
+        logger.info("Simulation started using EntryStrategy: {} and ExitStrategy {}", entryStrategy.getClass().getSimpleName(), exitStrategy.getClass().getSimpleName());
 
         for (StockData stockdata : stockDataList) {
             checkAndExecuteEntry(stockdata);
@@ -50,10 +54,10 @@ public class SimulationEngine {
         String symbol = stockdata.getSymbol();
         double currentPrice = stockdata.getClosePrice().doubleValue();
 
-        if (strategy.shouldEnter(stockdata)) {
+        if (entryStrategy.shouldEnter(stockdata)) {
             double quantity = investmentPerTrade / currentPrice;
             Position position = new Position(
-                    symbol, currentPrice, quantity, date, strategy.getClass().getSimpleName()
+                    symbol, currentPrice, quantity, date, entryStrategy.getClass().getSimpleName()
             );
             portfolio.addPosition(position);
             logger.info("Entry signal triggered → Opened position: {} at ${} ({} shares)", symbol, currentPrice, quantity);
@@ -61,7 +65,7 @@ public class SimulationEngine {
     }
 
     private void checkAndExecuteExit(StockData stockdata) {
-        if (strategy.shouldExit(stockdata, portfolio)) {
+        if (exitStrategy.shouldExit(stockdata, portfolio)) {
             logger.info("Exit signal triggered → Closing all open positions");
             LocalDate date = stockdata.getTradeDate();
             double currentPrice = stockdata.getClosePrice().doubleValue();
