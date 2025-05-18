@@ -1,5 +1,6 @@
 package com.example.FinTech.engine.strategy.exit;
 
 public enum ExitStrategyType {
-    TARGET_PROFIT
+    TARGET_PROFIT,
+    TRAILING_STOP
 }
