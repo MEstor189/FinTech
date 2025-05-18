@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.example.FinTech.alpaca.entity.StockData;
+import com.example.FinTech.engine.strategy.util.MovingAverageUtil;
 
 public class MovingAverageEntry implements EntryStrategy {
 
@@ -25,29 +26,22 @@ public class MovingAverageEntry implements EntryStrategy {
     @Override
     public boolean shouldEnter(StockData today) {
         LocalDate currentDate = today.getTradeDate();
+
         LocalDate yesterday = currentDate.minusDays(1);
 
-        Double shortAvgToday = calculateAverage(currentDate, shortPeriod);
-        Double longAvgToday = calculateAverage(currentDate, longPeriod);
-        Double shortAvgYesterday = calculateAverage(yesterday, shortPeriod);
-        Double longAvgYesterday = calculateAverage(yesterday, longPeriod);
+        double shortAvgToday = MovingAverageUtil.calculateAverage(currentDate, shortPeriod, historicalData);
+        double longAvgToday = MovingAverageUtil.calculateAverage(currentDate, longPeriod, historicalData);
+        double shortAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, shortPeriod, historicalData);
+        double longAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, longPeriod, historicalData);
 
-        if (shortAvgToday == null || longAvgToday == null || shortAvgYesterday == null || longAvgYesterday == null) {
+/*         if (shortAvgToday == null || longAvgToday == null || shortAvgYesterday == null || longAvgYesterday == null) {
             return false;
-        }
-        logger.info("DAY:    {}     short: {} long: {} shorttoday: {} longtoday{}", currentDate, shortAvgYesterday,
-                longAvgYesterday, shortAvgToday, longAvgToday);
+        } */
+
+        logger.info("DAY: {} | shortY: {} longY: {} | shortT: {} longT: {}", 
+                    currentDate, shortAvgYesterday, longAvgYesterday, shortAvgToday, longAvgToday);
+
         return shortAvgYesterday <= longAvgYesterday && shortAvgToday > longAvgToday;
     }
-
-private Double calculateAverage(LocalDate endDate, int period) {
-    return historicalData.entrySet().stream()
-        .filter(e -> !e.getKey().isAfter(endDate))
-        .sorted((e1, e2) -> e2.getKey().compareTo(e1.getKey())) // rückwärts sortiert
-        .limit(period)
-        .mapToDouble(e -> e.getValue().getClosePrice().doubleValue())
-        .average()
-        .orElse(Double.NaN);
-}
 
 }
