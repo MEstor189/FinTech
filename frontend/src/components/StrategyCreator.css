@@ -1,6 +1,6 @@
 .grid-container {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -12,4 +12,133 @@
   .grid-container {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+.strategy-card {
+  background: #181925;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 16px #0002;
+  color: #fff;
+}
+
+.strategy-title {
+  color: #a259ff;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.strategy-subtitle {
+  color: #a259ff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.input-label-lila .MuiInputLabel-root,
+.input-label-lila label {
+  color: #a259ff !important;
+}
+
+input::placeholder, .MuiInputBase-input::placeholder {
+  color: #bdbdbd !important;
+  opacity: 1;
+}
+
+.MuiTextField-root {
+  background: #23243a !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.MuiOutlinedInput-root {
+  border-radius: 8px !important;
+  border: none !important;
+  background: #23243a !important;
+  color: #fff !important;
+}
+
+.MuiOutlinedInput-input {
+  color: #fff !important;
+}
+
+.MuiSelect-select {
+  color: #fff !important;
+  background: #23243a !important;
+}
+
+.MuiMenu-paper {
+  background: #23243a !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 16px #0002 !important;
+}
+
+.MuiMenuItem-root {
+  color: #fff !important;
+  background: #23243a !important;
+}
+
+.MuiMenuItem-root.Mui-selected,
+.MuiMenuItem-root.Mui-selected:hover {
+  background: #a259ff !important;
+  color: #fff !important;
+}
+
+.MuiMenuItem-root:hover {
+  background: #2d2e4a !important;
+  color: #fff !important;
+}
+
+/* Dunkle Scrollbar im Dropdown */
+.MuiMenu-paper::-webkit-scrollbar {
+  width: 8px;
+  background: #23243a;
+}
+.MuiMenu-paper::-webkit-scrollbar-thumb {
+  background: #181925;
+  border-radius: 8px;
+}
+.MuiMenu-paper {
+  scrollbar-color: #181925 #23243a;
+  scrollbar-width: thin;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #a259ff !important;
+  border-width: 1.5px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2.5px !important;
+  border-color: #a259ff !important;
+  box-shadow: 0 0 0 2px #a259ff44;
+}
+
+.save-btn {
+  background: linear-gradient(90deg, #a259ff 0%, #3772ff 50%, #a259ff 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.save-btn:hover {
+  background: linear-gradient(90deg, #8e44ec 0%, #3772ff 50%, #a259ff 100%);
+}
+
+.cancel-btn {
+  border-radius: 8px;
+}
+
+/* Entferne Pfeile bei number inputs (Chrome, Safari, Edge) */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Entferne Pfeile bei number inputs (Firefox) */
+input[type=number] {
+  -moz-appearance: textfield;
 } 

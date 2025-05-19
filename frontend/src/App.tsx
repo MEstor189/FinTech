@@ -1,28 +1,23 @@
-import { Container, Typography, Paper } from '@mui/material';
-import styled from '@emotion/styled';
-import StrategyCreator from './components/StrategyCreator';
-
-const StyledPaper = styled(Paper)`
-  padding: 20px;
-  height: 100%;
-  min-height: 300px;
-`;
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import StrategiesPage from './pages/StrategiesPage';
+import SimulationPage from './pages/SimulationPage';
+import InformationPage from './pages/InformationPage';
 
 function App() {
-  const handleStrategyCreate = (strategy: any) => {
-    console.log('Neue Strategie erstellt:', strategy);
-    // Hier würde die Logik zum Speichern der Strategie implementiert werden
-  };
-
   return (
-    <Container maxWidth="sm" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Strategy-Creation
-      </Typography>
-      <StyledPaper>
-        <StrategyCreator onStrategyCreate={handleStrategyCreate} />
-      </StyledPaper>
-    </Container>
+    <Router>
+      <Navbar />
+      <div style={{ paddingTop: 72 }}>
+        <Routes>
+          <Route path="/strategies" element={<StrategiesPage />} />
+          <Route path="/simulation" element={<SimulationPage />} />
+          <Route path="/information" element={<InformationPage />} />
+          <Route path="/" element={<Navigate to="/simulation" replace />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
