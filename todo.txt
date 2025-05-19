@@ -1,7 +1,5 @@
 Backend Engine:
 
-1. exit kriterien erstellen
-
 
  (Hilfsmethoden für Prozentberechnung, Kursvergleich, etc.)
 
