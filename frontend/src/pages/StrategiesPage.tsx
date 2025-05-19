@@ -3,8 +3,24 @@ import StrategyCreator from '../components/StrategyCreator';
 import StrategyList from '../components/StrategyList';
 import '../components/StrategyCreator.css';
 
+const TEST_STRATEGY = {
+  name: 'Test Strategy',
+  entryStrategy: 'Momentum',
+  exitStrategy: 'TargetProfit',
+  entryParameters: { short: 10, long: 30 },
+  exitParameters: { threshold: 0.05, multiplier: 2 },
+};
+
+const TEST_STRATEGY_2 = {
+  name: 'test3',
+  entryStrategy: 'BuyTheDip',
+  exitStrategy: 'TrailingStop',
+  entryParameters: { short: 5, long: 15 },
+  exitParameters: { threshold: 0.02, multiplier: 1.5 },
+};
+
 export default function StrategiesPage() {
-  const [strategies, setStrategies] = useState<any[]>([]);
+  const [strategies, setStrategies] = useState<any[]>([TEST_STRATEGY, TEST_STRATEGY_2]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const handleCreate = (strategy: any) => {
@@ -40,7 +56,7 @@ export default function StrategiesPage() {
         justifyContent: 'flex-start',
         padding: '24px 0',
         boxSizing: 'border-box',
-        background: 'transparent',
+        background: '#181925',
       }}
     >
       <div
@@ -51,7 +67,6 @@ export default function StrategiesPage() {
           borderRadius: 16,
           padding: 32,
           marginBottom: 32,
-          boxShadow: '0 2px 16px #0002',
           boxSizing: 'border-box',
         }}
       >
@@ -64,12 +79,11 @@ export default function StrategiesPage() {
       </div>
       <div
         style={{
-          width: '100%',
-          maxWidth: 800,
+          width: '100vw',
           background: '#181925',
           borderRadius: 16,
           padding: 24,
-          boxShadow: '0 2px 16px #0002',
+
           boxSizing: 'border-box',
         }}
       >
@@ -77,6 +91,7 @@ export default function StrategiesPage() {
           strategies={strategies}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          wide
         />
       </div>
     </div>

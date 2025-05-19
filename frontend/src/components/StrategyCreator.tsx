@@ -213,8 +213,8 @@ export default function StrategyCreator({ onStrategyCreate, editStrategy, isEdit
           </Button>
           {isEditing && onCancelEdit && (
             <Button
-              variant="outlined"
-              color="inherit"
+              variant="contained"
+              color="primary"
               fullWidth
               className="cancel-btn"
               onClick={onCancelEdit}
