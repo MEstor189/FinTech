@@ -1,0 +1,38 @@
+📦 Daten für alle 3 Charts – Backend → Frontend
+🧩 1. Kursverlauf (PriceChart)
+priceSeries: PricePoint[]
+
+Zeitreihe mit Tageskursen (date, close)
+
+trades: Trade[]
+
+Liste der abgeschlossenen Trades mit Datum, Preis, Typ (BUY/SELL)
+
+movingAverages?: { short: MA[], long: MA[] }
+
+Optional: gleitende Durchschnitte (MA5, MA20 etc.) über dieselbe Zeitreihe
+
+📊 2. PerformanceChart (prozentuale Performance)
+strategies: StrategyPerformance[]
+
+Für jede Strategie:
+
+name: Strategiebezeichnung
+
+data: { date, performance }[]: Kumulierte %-Veränderung auf Basis abgeschlossener Trades
+
+📋 3. StrategyCompareChart (Metrik-Vergleich)
+strategies: StrategyMetrics[]
+
+Für jede Strategie:
+
+totalProfit: Gesamtrendite (z. B. +12.4 %)
+
+averageHoldingDays: Ø Haltezeit je Trade
+
+tradeCount: Anzahl der Trades
+
+winRate: Trefferquote in %
+
+maxDrawdown: Größter relativer Verlust in %
+
