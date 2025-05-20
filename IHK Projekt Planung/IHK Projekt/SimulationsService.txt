@@ -1,0 +1,34 @@
+🧾 SimulationService – Übersicht
+Zweck:
+Zentrale Koordinationsklasse, die alle Bestandteile der Simulation verbindet:
+
+Datenbank
+
+Strategieauswahl
+
+Simulationsengine
+
+Hauptverantwortung:
+Holt Kursdaten (StockData) aus der Datenbank über das Repository
+
+Wandelt die Daten in eine Map um (Map<LocalDate, StockData>), damit Strategien auf Vergangenheitsdaten zugreifen können
+
+Erstellt die passende Handelsstrategie über die StrategyFactory
+
+Startet die SimulationEngine mit den vorbereiteten Daten
+
+Gibt das Ergebnis als SimulationResult zurück
+
+Eingabe:
+SimulationRequest (enthält: Symbol, Zeitraum, Strategie-Typ, Parameter, Investitionsbetrag)
+
+Ausgabe:
+SimulationResult (enthält: Liste abgeschlossener Trades, Gesamtgewinn, Durchschnittliche Haltedauer, Anzahl Trades)
+
+Besondere Punkte:
+Prüft, ob Kursdaten vorhanden sind (ansonsten Fehler)
+
+Nutzt Logger für Start, Ende und mögliche Warnungen
+
+Nutzt Repository-Methode mit OrderByTradeDateAsc zur Sicherstellung korrekter Sortierung
+

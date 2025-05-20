@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
 import HexagonIcon from '@mui/icons-material/Hexagon';
 import { useLocation, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
 const tabRoutes = ['/simulation', '/strategies', '/information'];
 
@@ -16,7 +17,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Finde den aktiven Tab anhand der aktuellen Route
+
   const currentTab = React.useMemo(() => {
     const idx = tabRoutes.findIndex((route) => location.pathname.startsWith(route));
     return idx === -1 ? 1 : idx; // Default: Strategies

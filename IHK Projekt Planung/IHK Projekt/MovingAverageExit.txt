@@ -1,0 +1,40 @@
+🧾 Exit-Strategie: MovingAverageCrossExit
+🎯 Ziel
+Diese Strategie beendet eine Position, sobald sich ein kurzfristiger gleitender Durchschnitt (MA) unter einen langfristigen MA kreuzt. Dies signalisiert das Ende eines Aufwärtstrends und löst einen Verkauf aus, um Gewinne zu sichern oder Verluste zu begrenzen.
+
+⚙️ Funktionsweise
+Die Strategie berechnet für jeden Handelstag:
+
+Den kurzfristigen MA (z. B. über 3 Tage)
+
+Den langfristigen MA (z. B. über 10 Tage)
+
+Es wird geprüft, ob:
+
+nginx
+Kopieren
+Bearbeiten
+shortMA_yesterday >= longMA_yesterday
+&& shortMA_today < longMA_today
+Trifft das zu, wird shouldExit = true und alle offenen Positionen werden geschlossen.
+
+🧩 Beispielkonfiguration (JSON):
+json
+Kopieren
+Bearbeiten
+"exitStrategyType": "MOVING_AVERAGE_CROSS",
+"exitParams": {
+  "shortPeriod": 3,
+  "longPeriod": 10
+}
+✅ Vorteile:
+Reagiert auf Trendwenden
+
+Automatisiert den geplanten Ausstieg bei Schwäche
+
+Kombinierbar mit Entry auf MA-Crossover für durchgängige MA-basierte Strategie
+
+⚠️ Nachteile:
+Liefert Signale verzögert, da Durchschnittswerte träge sind
+
+Funktioniert schlechter bei seitwärts laufenden Märkten

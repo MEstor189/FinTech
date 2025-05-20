@@ -1,0 +1,78 @@
+🧩 Verwendete Chart-Library: Recharts
+✅ Warum Recharts?
+TypeScript-freundlich: komplett typisiert, einfach zu integrieren
+
+React-idiomatisch: nutzt React-Komponentenlogik statt imperative APIs
+
+Flexibel: unterstützt alle benötigten Diagrammtypen (Line, Bar, Radar)
+
+Interaktiv: eingebaute Tooltips, Legenden, Responsive-Support
+
+Customizability: Buy/Sell Marker, Moving Averages etc. lassen sich leicht einfügen
+
+Alternative Libraries (Chart.js, React Financial Charts) waren entweder zu starr, nicht mehr gepflegt oder zu komplex für das Projektziel.
+
+⚙️ Komponentenübersicht
+1. 🔀 ChartSwitcher.tsx
+Eine simple Umschalt-Komponente zwischen den 3 Charttypen
+
+Nutzt Buttons zum Wechsel
+
+Props:
+
+selectedChart: Aktuell gewählter Charttyp (z. B. "price")
+
+onChange: Callback bei Wechsel
+
+2. 📈 PriceChart.tsx
+Zeigt den Kursverlauf einer Aktie
+
+Enthält:
+
+LineChart für Preiszeitreihe
+
+Buy/Sell Punkte via Scatter Layer (grün = Buy, rot = Sell)
+
+Optionale gleitende Durchschnitte (short/long MA)
+
+Props:
+
+priceSeries: Zeitreihe { date, close }
+
+trades: Liste von Buy/Sell-Trades mit Zeit und Preis
+
+movingAverages?: Optional MA-Daten
+
+3. 📊 EquityCurveChart.tsx
+Zeigt den Portfolio-Wert über Zeit
+
+Unterstützt mehrere Strategien parallel
+
+Jeder Strategiename wird als separate Line dargestellt
+
+Daten werden gemerged auf ein gemeinsames Format
+
+Props:
+
+strategies[]: Liste von Strategien mit Namen & equityCurve[]
+
+4. 🧠 StrategyCompareChart.tsx
+Radar-Diagramm für Strategie-Metriken
+
+Metriken:
+
+Total Profit
+
+Average Holding Days
+
+Trade Count
+
+Win Rate
+
+Max Drawdown
+
+Jede Strategie ist eine „Linie“ im Radar
+
+Props:
+
+strategies[]: Enthält Metriken + Strategienamen

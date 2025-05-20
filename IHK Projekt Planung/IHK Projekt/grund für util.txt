@@ -1,0 +1,26 @@
+🔧 Warum und was wir mit MovingAverageUtil gemacht haben
+🧠 Ausgangspunkt:
+Sowohl MovingAverageEntry als auch MovingAverageCrossExit verwenden dieselbe technische Grundlage:
+
+„Berechne den Durchschnitt der Schlusskurse der letzten n Handelstage“
+
+Anfangs war diese Logik dupliziert in jeder Strategieklasse.
+
+✅ Entscheidung: Auslagerung in MovingAverageUtil
+Gründe:
+
+Wiederverwendbarkeit: Eine zentrale Methode statt doppelter Logik
+
+Wartbarkeit: Anpassungen (z. B. von MA auf VWAP) nur an einer Stelle nötig
+
+Robustheit: Einheitliche Fehlerbehandlung & Sortierlogik (z. B. nur echte Handelstage)
+
+Testbarkeit: Utilitys lassen sich separat testen und validieren
+
+✨ Ergebnis:
+java
+Kopieren
+Bearbeiten
+MovingAverageUtil.calculateAverage(LocalDate, int, Map<...>)
+wird jetzt in Entry & Exit verwendet – mit identischem Verhalten.
+

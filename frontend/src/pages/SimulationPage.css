@@ -1,0 +1,73 @@
+.simulation-root {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #181925;
+}
+
+.simulation-paper {
+  width: 100%;
+  max-width: 100vw;
+  background: #23243a;
+  border-radius: 16px;
+  padding: 32px;
+  min-height: 80vh;
+  color: white;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+}
+
+.simulation-title {
+  color: #a259ff;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.simulation-content {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.simulation-hint {
+  color: #aaa;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 48px;
+}
+
+.charts-row {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.chart-container {
+  background: #181828;
+  border-radius: 16px;
+  padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.chart-title-blue {
+  color: #5a6aff;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.chart-title-pink {
+  color: #ff4fd8;
+  margin-bottom: 18px;
+  font-weight: 600;
+} 

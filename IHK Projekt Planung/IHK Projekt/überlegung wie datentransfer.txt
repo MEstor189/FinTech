@@ -1,0 +1,8 @@
+3 verschieden charts. daten vom backend kommen immer nur für einen chart. wenn anderer chart ausgewählt wird kommt anfrage an backend der dann die nötigen daten für den neuen chart schickt. (?)
+Im backend werden alle daten beim Simulationsstart berechnet und temporär gespeichert?
+
+
+oder 
+
+
+alle daten werden am anfang bom backend ans frontend geschickt und das speichert es dann ab und nimmt nur die daten für den jeweiligen chart?

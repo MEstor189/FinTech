@@ -1,0 +1,52 @@
+.sim-ctrl-bar {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    width: 100%;
+  }
+  
+  .sim-ctrl-select {
+    min-width: 180px !important;
+  }
+  
+  .sim-ctrl-label {
+    color: #a259ff !important;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  
+  .sim-ctrl-select-input {
+    color: white !important;
+    background: #23243a !important;
+    border-radius: 8px !important;
+  }
+  
+  .sim-ctrl-timeframe {
+    min-width: 220px;
+    background: #23243a !important;
+    border-radius: 8px !important;
+  }
+  
+  .sim-ctrl-symbol {
+    min-width: 120px;
+    background: #23243a !important;
+    border-radius: 8px !important;
+  }
+  
+  .sim-ctrl-btn {
+    background: #d72660 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    min-width: 180px !important;
+    height: 56px !important;
+    margin-left: 8px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px 0 rgba(215,38,96,0.08);
+    transition: background 0.2s;
+  }
+  
+  .sim-ctrl-btn:hover {
+    background: #b81e4b !important;
+  }

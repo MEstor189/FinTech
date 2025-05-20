@@ -1,0 +1,7 @@
+Momentum Strategy:
+
+Wir prüfen, ob der Schlusskurs an den letzten n Tagen jeweils höher war als am Tag davor.
+
+Sobald ein Tag nicht gestiegen ist, wird false zurückgegeben.
+
+Nur bei durchgehendem Aufwärtstrend → true

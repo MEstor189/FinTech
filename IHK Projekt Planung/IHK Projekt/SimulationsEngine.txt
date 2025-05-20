@@ -1,0 +1,24 @@
+ Was macht SimulationEngine.java?
+Nimmt:
+
+eine Strategie
+
+historische Kursdaten
+
+Einstellungen (z. B. Investitionsbetrag)
+
+Initialisiert ein leeres Portfolio
+
+Iteriert durch jeden Tag in den Daten:
+
+Fragt die Strategie: soll gekauft werden?
+
+Wenn ja → neue Position ins Portfolio
+
+Fragt die Strategie: soll verkauft werden?
+
+Wenn ja → alle offenen Positionen verkaufen
+
+Baut am Ende eine Liste von Trades
+
+Liefert ein SimulationResult

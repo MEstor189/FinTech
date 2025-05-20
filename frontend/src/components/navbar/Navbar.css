@@ -1,0 +1,56 @@
+.navbar-appbar {
+  background: #13141a !important;
+  width: 100vw;
+  left: 0;
+  top: 0;
+  border-radius: 0;
+  margin: 0;
+  z-index: 1201;
+  position: fixed !important;
+}
+
+.navbar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  min-height: 64px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-title {
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+  font-size: 1.4rem;
+}
+
+.navbar-tabs {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.navbar-tab {
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  min-width: 120px !important;
+  text-transform: none !important;
+}
+
+.navbar-tab-active {
+  color: #a259ff !important;
+}
+
+.navbar-tab-indicator {
+  background: linear-gradient(90deg, #a259ff, #3772ff) !important;
+}
+
+.navbar-menu-btn {
+  color: white !important;
+} 

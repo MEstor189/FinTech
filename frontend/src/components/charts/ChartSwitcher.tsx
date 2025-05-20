@@ -1,4 +1,5 @@
 import React from "react";
+import "./ChartSwitcher.css";
 
 export type ChartType = "price" | "equity" | "compare";
 
@@ -20,14 +21,7 @@ const ChartSwitcher: React.FC<ChartSwitcherProps> = ({ selectedChart, onChange }
         <button
           key={type}
           onClick={() => onChange(type)}
-          style={{
-            padding: "0.5rem 1rem",
-            backgroundColor: selectedChart === type ? "#007bff" : "#e0e0e0",
-            color: selectedChart === type ? "#fff" : "#000",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className={`chart-switcher-btn${selectedChart === type ? ' active' : ''}`}
         >
           {label}
         </button>

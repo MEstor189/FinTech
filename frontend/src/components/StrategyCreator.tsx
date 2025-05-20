@@ -10,6 +10,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import './StrategyCreator.css';
+import React from "react";
 
 interface StrategyCreatorProps {
   onStrategyCreate: (strategy: any) => void;

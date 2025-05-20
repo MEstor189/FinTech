@@ -1,0 +1,94 @@
+Notizen Engine-Klassen
+
+
+
+✅ SimulationResult
+Enthält das Ergebnis einer vollständigen Simulation.
+
+Speichert alle abgeschlossenen Trades (List<Trade>).
+
+Berechnet:
+
+Gesamtgewinn aller Trades (in $)
+
+Durchschnittliche Haltedauer (in Tagen)
+
+Anzahl aller abgeschlossenen Trades
+
+Wird von SimulationEngine am Ende zurückgegeben.
+
+✅ SimulationEngine
+Zentrale Klasse zur Ausführung der Simulation.
+
+Steuert den gesamten Ablauf:
+
+iteriert über die Kursdaten
+
+prüft, ob Kauf-/Verkaufssignale vorhanden sind
+
+erstellt Positionen und schließt sie
+
+Nutzt eine übergebene Strategie zur Entscheidung (z. B. BuyTheDip)
+
+Hält intern:
+
+Portfolio mit offenen Positionen
+
+Liste abgeschlossener Trades
+
+Gibt am Ende ein SimulationResult zurück.
+
+✅ Portfolio
+Container für alle aktuell offenen Positionen.
+
+Bietet Methoden zum:
+
+Hinzufügen neuer Positionen
+
+Abrufen aller offenen Positionen
+
+Löschen aller Positionen (für globalen Verkauf)
+
+Berechnung des Gesamtwerts (optional)
+
+Wird nur von der SimulationEngine verwendet.
+
+✅ Trade
+Repräsentiert einen abgeschlossenen Trade (Kauf + Verkauf).
+
+Speichert:
+
+Kauf- und Verkaufspreis
+
+Symbol (Aktie)
+
+Stückzahl
+
+Datum von Kauf und Verkauf
+
+Name der auslösenden Strategie
+
+Berechnet:
+
+Absoluter Gewinn in $
+
+Prozentualer Gewinn
+
+Haltedauer in Tagen
+
+✅ Position
+Repräsentiert eine offene Position nach einem Kauf.
+
+Speichert:
+
+Aktie (Symbol)
+
+Kaufpreis
+
+Stückzahl (auch Bruchstücke möglich, double)
+
+Kaufdatum
+
+Name der Strategie, die den Kauf ausgelöst hat
+
+Wird in der Portfolio-Liste gehalten, bis sie verkauft wird.

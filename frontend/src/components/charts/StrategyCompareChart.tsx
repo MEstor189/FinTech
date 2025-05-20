@@ -2,6 +2,7 @@ import React from "react";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer
 } from "recharts";
+import './StrategyCompareChart.css';
 
 type StrategyMetrics = {
   name: string;
@@ -14,6 +15,7 @@ type StrategyMetrics = {
 
 interface StrategyCompareChartProps {
   strategies: StrategyMetrics[];
+  height?: number;
 }
 
 const metricsKeys = [
@@ -24,7 +26,7 @@ const metricsKeys = [
   { key: "maxDrawdown", label: "Drawdown" }
 ];
 
-const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies }) => {
+const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies, height = 400 }) => {
   const radarData = metricsKeys.map(({ key, label }) => {
     const entry: any = { metric: label };
     strategies.forEach((s) => {
@@ -33,10 +35,10 @@ const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies 
     return entry;
   });
 
-  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00c49f"];
+  const colors = ["#5a6aff", "#ff4fd8"];
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={height}>
       <RadarChart outerRadius={150} data={radarData}>
         <PolarGrid />
         <PolarAngleAxis dataKey="metric" />
@@ -48,7 +50,7 @@ const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies 
             dataKey={s.name}
             stroke={colors[idx % colors.length]}
             fill={colors[idx % colors.length]}
-            fillOpacity={0.6}
+            fillOpacity={0.4}
           />
         ))}
         <Legend />

@@ -1,0 +1,49 @@
+SimulationEngine vs SimulationService
+
+
+⚙️ SimulationEngine – die technische Logik
+Zuständig für die konkrete Simulation selbst
+
+Iteriert über Kursdaten
+
+Wendet die Strategie an (shouldEnter, shouldExit)
+
+Öffnet und schließt Positionen
+
+Gibt SimulationResult zurück
+
+✅ Nutzt nur interne Engine-Klassen
+
+🧠 SimulationService – die Ablaufsteuerung
+Bindeglied zwischen:
+
+Controller (API)
+
+Datenbank (z. B. StockDataRepository)
+
+Engine (führt aus)
+
+Factory (erzeugt Strategie)
+
+Bereitet alles vor, was die Engine braucht:
+
+Kursdaten besorgen
+
+Datenstruktur vorbereiten (Map<LocalDate, StockData>)
+
+Strategie auswählen/konfigurieren
+
+Engine starten
+
+✅ Führt die Teile zusammen, ruft die Engine auf
+
+🧾 Analogie:
+Rolle	Vergleich
+SimulationEngine	Motor, der rechnet
+SimulationService	Fahrer, der weiß, woher der Sprit kommt, wie man startet, und wann man bremst
+
+📌 Fazit:
+SimulationEngine = Wie läuft die Simulation?
+
+SimulationService = Was wird simuliert, mit welchen Daten, welcher Strategie?
+

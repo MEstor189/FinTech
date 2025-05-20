@@ -1,0 +1,28 @@
+Besondere Fälle: 
+
+📄 Verkaufslogik und Einschränkung bei Wiedereinstieg am selben Tag
+Um die Engine nachvollziehbar und technisch konsistent zu gestalten, wurde folgende Regel definiert:
+
+Sobald eine Verkaufsbedingung bei einer offenen Position erfüllt ist, werden alle zum Zeitpunkt offenen Positionen sofort liquidiert.
+Ein anschließender Wiedereinstieg am selben Handelstag ist nicht erlaubt.
+
+💡 Beispiel:
+Am 21.05.2024 löste eine Position das Gewinnziel von +5 % aus.
+Die Engine führte daraufhin einen globalen Verkauf aller Positionen aus, z. B.:
+
+Position A (gekauft am 10.05.) wurde mit +5 % Gewinn verkauft
+
+Position B (gekauft am 17.05.) wurde mit +1.3 % mitverkauft
+
+An diesem Tag lagen die Schlusskurse erneut über den Einstiegsschwellen (z. B. 3-Tage-Momentum),
+ein neues Einstiegssignal wäre also grundsätzlich vorhanden gewesen.
+
+Trotzdem wurde kein neuer Kauf ausgeführt,
+da nach einem globalen Verkauf keine weiteren Transaktionen mehr am selben Tag erlaubt sind.
+
+✅ Vorteil dieser Regelung:
+Vermeidet doppelte Verarbeitungen am selben Tag
+
+Hält den Simulationsablauf klar strukturiert (Kauf → Halten → Verkauf → Pause)
+
+Macht das Verhalten der Engine nachvollziehbar und prüferfreundlich

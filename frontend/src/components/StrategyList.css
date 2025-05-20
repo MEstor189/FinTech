@@ -1,0 +1,111 @@
+.strategy-list-root {
+    max-width: 100vw;
+    overflow-x: auto;
+    padding: 0 8px;
+  }
+  
+  .strategy-list-title {
+    margin-bottom: 20px;
+    color: #a259ff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+  }
+  
+  .strategy-list-empty {
+    color: #888;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .strategy-list-item {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    background: #23243a;
+    border-radius: 12px;
+    padding: 12px 24px;
+    margin-bottom: 16px;
+    min-height: 60px;
+    gap: 24px;
+    flex-direction: row;
+  }
+  
+  .strategy-list-item.small {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .strategy-list-main {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .strategy-list-name {
+    font-weight: 700;
+    min-width: 160px;
+    color: #a259ff;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  
+  .strategy-list-details {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .strategy-list-detail-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 120px;
+  }
+  
+  .strategy-list-detail-label {
+    color: #a259ff;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  
+  .strategy-list-detail-value {
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  .strategy-list-params {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .strategy-list-param {
+    color: #fff;
+    font-size: 16px;
+    background: #181925;
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-bottom: 4px;
+  }
+  
+  .strategy-list-actions {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    align-items: center;
+    align-self: center;
+    margin-top: 0;
+  }
+  
+  .strategy-list-edit-btn,
+  .strategy-list-delete-btn {
+    border-radius: 8px !important;
+    min-width: 70px !important;
+    font-weight: 600;
+  }

@@ -1,0 +1,170 @@
+🧾 Zusammenfassung: Umstellung auf Entry- und Exit-Strategien
+🎯 Ziel:
+Die bisherige Strategy-Klasse wurde in zwei separate Strategie-Typen aufgeteilt:
+
+Strategieart	Zweck	Beispiel
+EntryStrategy	Wann wird gekauft?	BuyTheDipEntryStrategy
+ExitStrategy	Wann wird verkauft?	TargetProfitExitStrategy
+
+Diese Trennung macht dein System flexibler, realistischer und modularer.
+
+📁 Neue Struktur:
+plaintext
+Kopieren
+Bearbeiten
+engine/
+└── strategy/
+    ├── entry/
+    │   ├── EntryStrategy.java
+    │   ├── BuyTheDipEntryStrategy.java
+    │   └── EntryStrategyFactory.java
+    ├── exit/
+    │   ├── ExitStrategy.java
+    │   ├── TargetProfitExitStrategy.java
+    │   └── ExitStrategyFactory.java
+    └── enums/
+        ├── EntryStrategyType.java
+        └── ExitStrategyType.java
+🔧 Zentrale Interfaces
+EntryStrategy.java
+java
+Kopieren
+Bearbeiten
+boolean shouldEnter(StockData data);
+ExitStrategy.java
+java
+Kopieren
+Bearbeiten
+boolean shouldExit(StockData data, Portfolio portfolio);
+🛠️ Wichtige Klassen
+BuyTheDipEntryStrategy
+Einstieg, wenn der Vortagspreis um ≥ dipThreshold gefallen ist
+
+TargetProfitExitStrategy
+Verkauf, wenn aktuelle Position ≥ profitTarget erreicht
+
+🧠 Neue Factories
+EntryStrategyFactory.createEntryStrategy(...)
+Baut eine Entry-Strategie anhand von Typ + Parametern
+
+ExitStrategyFactory.createExitStrategy(...)
+Baut eine Exit-Strategie anhand von Typ + Parametern
+
+🧾 DTO (Request)
+Beispielstruktur SimulationRequest:
+json
+Kopieren
+Bearbeiten
+{
+  "entryStrategyType": "BUY_THE_DIP",
+  "exitStrategyType": "TARGET_PROFIT",
+  "entryParams": { "dipThreshold": 3.0 },
+  "exitParams": { "profitTarget": 5.0 }
+}
+🔁 Neuer Ablauf in SimulationEngine
+java
+Kopieren
+Bearbeiten
+if (entryStrategy.shouldEnter(today)) {
+    // Position kaufen
+}
+
+if (exitStrategy.shouldExit(today, portfolio)) {
+    // Alle offenen Positionen verkaufen
+}
+✅ Vorteile der Umstellung
+Kombinierbarkeit von Strategien (z. B. BuyTheDip + MovingAverage)
+
+Einheitliches Designprinzip
+
+Leichtere Erweiterbarkeit
+
+Sauberere Architektur → prüferfreundlich
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+📄 Architekturanpassung: Trennung von Kauf- und Verkaufsstrategien
+Im Verlauf des Projekts wurde die Architektur der Handelsstrategien modularisiert, um mehr Flexibilität, Wartbarkeit und Realitätsnähe zu erreichen.
+Anstatt eine monolithische Strategieklasse zu verwenden, wurde das System so umgebaut, dass Einstiegs- und Ausstiegsentscheidungen getrennt behandelt werden.
+
+🎯 Ziel der Umstellung
+Die ursprüngliche Strategy-Schnittstelle, die sowohl Einstieg (shouldEnter) als auch Ausstieg (shouldExit) definierte, wurde aufgeteilt in:
+
+EntryStrategy: definiert die Logik, wann eine neue Position eröffnet wird.
+
+ExitStrategy: entscheidet, wann eine Position geschlossen werden soll.
+
+Dadurch können verschiedene Kombinationen von Kauf- und Verkaufsstrategien flexibel zusammengesetzt und in der Simulation verwendet werden.
+
+🔧 Technische Umsetzung
+Neue Interfaces:
+EntryStrategy: enthält die Methode shouldEnter(StockData data)
+
+ExitStrategy: enthält die Methode shouldExit(StockData data, Portfolio portfolio)
+
+Beispielimplementierungen:
+BuyTheDipEntryStrategy: Einstieg bei starkem Kursrückgang gegenüber dem Vortag.
+
+TargetProfitExitStrategy: Verkauf bei Erreichen eines definierten Gewinnziels.
+
+Strategie-Factories
+Zwei separate Factory-Klassen wurden eingeführt:
+
+EntryStrategyFactory
+
+ExitStrategyFactory
+
+Diese erzeugen jeweils die passende Strategieinstanz basierend auf einem enum-Typ und einem Parametersatz (Map<String, Double>).
+So kann über die API definiert werden, welche Strategietypen genutzt und welche Schwellenwerte gesetzt werden sollen.
+
+API-Anpassung
+Der SimulationRequest-DTO wurde erweitert um:
+
+entryStrategyType, exitStrategyType
+
+entryParams, exitParams
+
+Beispiel:
+
+json
+Kopieren
+Bearbeiten
+{
+  "entryStrategyType": "BUY_THE_DIP",
+  "exitStrategyType": "TARGET_PROFIT",
+  "entryParams": { "dipThreshold": 3.0 },
+  "exitParams": { "profitTarget": 5.0 }
+}
+Engine-Anpassung
+Die SimulationEngine verwendet nun zwei separate Strategieobjekte:
+
+java
+Kopieren
+Bearbeiten
+EntryStrategy entryStrategy;
+ExitStrategy exitStrategy;
+Diese werden im Simulationsablauf getrennt aufgerufen:
+
+shouldEnter(...) → neue Position wird eröffnet
+
+shouldExit(...) → alle offenen Positionen werden geschlossen
+
+✅ Vorteile der Umstellung
+Modularität: Einstieg und Ausstieg können unabhängig voneinander erweitert und getestet werden
+
+Flexibilität: Beliebige Kombinationen aus Strategien sind möglich
+
+Erweiterbarkeit: Neue Strategiearten können leicht hinzugefügt werden, ohne bestehende Klassen zu verändern
+
+Benutzerfreundlichkeit: Später kann der Benutzer über das Frontend Strategien frei zusammenstellen

@@ -1,0 +1,67 @@
+📌 Exit-Strategie: TrailingStopExit
+🔍 Ziel
+Die TrailingStopExit-Strategie dient dazu, offene Positionen automatisch zu schließen, wenn der Kurs um einen definierten Prozentsatz unter das bisherige Maximum seit Einstieg fällt. Sie hilft dabei, Gewinne zu sichern und Verluste zu begrenzen, ohne ein fixes Kursziel vorzugeben.
+
+⚙️ Funktionsweise
+Nach dem Kauf einer Position wird fortlaufend das höchste Closing-Preisniveau (Max Price) seit dem Einstieg gespeichert.
+
+Das Stop-Limit berechnet sich dynamisch als:
+
+java
+Kopieren
+Bearbeiten
+Stop Price = Max Price * (1 - trailingStopPercent)
+Sobald der aktuelle Schlusskurs unter dieses Stop-Limit fällt, wird die Position verkauft.
+
+📐 Parameter
+Name	Typ	Beschreibung	Beispielwert
+trailingStopPercent	Double	Prozentualer Abstand zum Max-Kurs, ab dem verkauft wird	7.0
+
+🔁 Anwendung in der Engine
+Die Strategie wird über das ExitStrategy-Interface implementiert.
+
+Für jede offene Position wird täglich der Maximalpreis aktualisiert.
+
+Wenn eine Position das Stop-Kriterium erfüllt, werden alle Positionen verkauft (globaler Exit gemäß Engine-Logik).
+
+🧪 Beispiel
+Konfiguration:
+json
+Kopieren
+Bearbeiten
+"exitStrategyType": "TRAILING_STOP",
+"exitParams": {
+  "trailingStopPercent": 7.0
+}
+Beispielablauf:
+Kauf bei 228.88 €
+
+Höchstkurs steigt auf 228.88 €
+
+Stop-Limit = 228.88 × 0.93 ≈ 212.86 €
+
+Sobald Kurs ≤ 212.86 €, wird verkauft
+
+📊 Beobachtete Effekte in der Simulation
+Frühes Ausstoppen bei kleinen Rücksetzern kann zu Verlusten führen
+
+Enge Stops (z. B. <5 %) oft problematisch bei volatilen Märkten
+
+Vorteilhaft in starken Aufwärtstrends, da Gewinne abgesichert werden
+
+Kombination mit anderen Bedingungen (z. B. Mindestgewinn oder Haltedauer) kann sinnvoll sein
+
+✅ Vorteile
+Automatisierter Schutz vor Kursrückgängen
+
+Realisiert Gewinne ohne feste Zielmarken
+
+Funktioniert adaptiv bei steigenden Kursen
+
+⚠️ Nachteile
+Kann zu frühem Verkauf führen
+
+Sensibel gegenüber kurzfristiger Volatilität
+
+Ohne Mindestpuffer ggf. weniger profitabel
+

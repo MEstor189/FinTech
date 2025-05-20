@@ -1,0 +1,30 @@
+.chart-switcher-wrapper {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-switcher-btn {
+  background: transparent;
+  color: #e0e0e0;
+  border: none;
+  border-radius: 12px;
+  padding: 0.6rem 1.6rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+
+.chart-switcher-btn.active {
+  background: #3a234a;
+  color: #ffb3fa;
+  border: 2px solid #a259ff;
+  box-shadow: 0 0 0 2px #2d1836;
+}
+
+.chart-switcher-btn:not(.active):hover {
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+} 

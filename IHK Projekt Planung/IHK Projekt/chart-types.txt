@@ -1,0 +1,83 @@
+🔍 1. Grundlegender Aktienkurs-Graph (Line Chart)
+📊 Darstellung:
+Zeitreihe des Kursverlaufs einer Aktie.
+
+Markiere Kauf- und Verkaufszeitpunkte (z. B. grüne und rote Punkte).
+
+Optional: Einblendung von gleitenden Durchschnitten, wenn verwendet.
+
+🧩 Benötigte Daten:
+Kursdaten über Zeitraum.
+
+Liste der Trades (Zeitpunkt, Preis, Buy/Sell).
+
+Strategieparameter (z. B. MA-Perioden) zum Berechnen und Überlagern von Indikatoren.
+
+➕ Erweiterung der API-Response:
+json
+Kopieren
+Bearbeiten
+{
+  "priceSeries": [ { "date": "2024-07-01", "close": 179.4 }, ... ],
+  "movingAverages": {
+    "short": [ ... ],
+    "long": [ ... ]
+  },
+  "trades": [ { "date": "...", "type": "BUY", "price": 174.0 }, ... ]
+}
+🧠 2. Strategie-Performance (Balken- oder Liniendiagramm)
+📊 Darstellung:
+Kumulativer Gewinn über Zeit.
+
+Equity Curve: Gesamtwert des Portfolios im Zeitverlauf.
+
+Vergleich mehrerer Strategien nebeneinander.
+
+➕ Erweiterung der API-Response:
+json
+Kopieren
+Bearbeiten
+{
+  "equityCurve": [ { "date": "2024-07-01", "value": 1000.0 }, ... ]
+}
+Optional bei Vergleich mehrerer Strategien:
+
+json
+Kopieren
+Bearbeiten
+{
+  "strategies": [
+    {
+      "name": "BuyTheDip",
+      "totalProfit": 120.5,
+      "equityCurve": [ ... ]
+    },
+    {
+      "name": "MovingAverage",
+      "totalProfit": 95.0,
+      "equityCurve": [ ... ]
+    }
+  ]
+}
+📊 3. Strategien-Vergleich (Radar- oder Balkendiagramm)
+Metriken zum Vergleich:
+Total Profit
+
+Average Holding Days
+
+Anzahl der Trades
+
+Max Drawdown (evtl. als neue Metrik berechnen)
+
+Trefferquote (Win Rate)
+
+➕ Erweiterung der API-Response:
+json
+Kopieren
+Bearbeiten
+{
+  "totalProfit": 120.5,
+  "averageHoldingDays": 3.2,
+  "tradeCount": 8,
+  "winRate": 62.5,
+  "maxDrawdown": -5.4

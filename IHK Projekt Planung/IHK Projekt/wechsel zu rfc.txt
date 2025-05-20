@@ -1,0 +1,32 @@
+📌 Entscheidungsbegründung: Wechsel von Chart.js zu React Financial Charts
+Im ursprünglichen Konzept war vorgesehen, zur Visualisierung der Kurs- und Strategieergebnisse eine Library auf Basis von Chart.js (z. B. react-chartjs-2) zu verwenden. Diese bietet einfache Möglichkeiten zur Darstellung von Linien- und Balkendiagrammen und ist weit verbreitet im Frontend-Bereich.
+
+Nach der Analyse der konkreten Anforderungen im Projekt wurde jedoch eine Neubeurteilung vorgenommen. Die Zielsetzung beinhaltet nicht nur einfache Kursverläufe, sondern auch komplexere Finanzvisualisierungen wie:
+
+Zeitreihen mit Lücken (z. B. Wochenenden, Feiertage)
+
+Darstellung von Buy- und Sell-Punkten im Kursverlauf
+
+Einbindung von Indikatoren wie Moving Averages
+
+Optional: Candlestick- oder OHLC-Charts
+
+Interaktive Features wie Zoom, Pan, Crosshair, Tooltips
+
+Chart.js stößt bei diesen Anforderungen schnell an Grenzen oder erfordert aufwendige Workarounds (z. B. manuelle Zeitachsenmanipulation, Custom-Overlays).
+
+Stattdessen fiel die Entscheidung auf die spezialisierte Library React Financial Charts, da sie:
+
+explizit für Finanzdaten und Börsencharts entwickelt wurde,
+
+native Unterstützung für technische Indikatoren, Handelssignale und Zeitachsen ohne Handelstage bietet,
+
+ein hohes Maß an Interaktivität (Zoom, Crosshair, Tooltip) mitliefert,
+
+und dabei komplett in React integrierbar ist.
+
+Durch diesen Wechsel können die gewünschten Visualisierungen deutlich effizienter und professioneller umgesetzt werden, ohne an Flexibilität zu verlieren. Für die spätere Erweiterung um weitere Analysetools (z. B. Performance-Overlay, Monte-Carlo-Simulation) ist die neue Library ebenfalls besser geeignet.
+
+
+Die Library react-financial-charts wurde trotz fehlender aktiver Wartung gezielt ausgewählt, da sie exakt auf Finanzvisualisierungen zugeschnitten ist und den Funktionsumfang bietet, der für dieses Projekt notwendig ist.
+Für ein abgeschlossenes, nicht-öffentliches Demonstrationsprojekt ist der Einsatz aus Sicherheits- und Wartungsgründen vertretbar. Eine Migration auf eine moderne Alternative wäre bei einem langfristigen oder produktiven Einsatz ratsam.

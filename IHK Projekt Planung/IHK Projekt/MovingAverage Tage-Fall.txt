@@ -1,0 +1,29 @@
+📄 Dokumentation: Erkenntnisse zur Moving-Average-Strategie
+✅ 1. Berechnung des Moving Averages (MA)
+Die gleitenden Durchschnitte (Moving Averages) werden ausschließlich auf Basis von echten Handelstagen berechnet.
+Wochenenden und Feiertage werden bewusst übersprungen, um eine Verzerrung der Durchschnittswerte zu vermeiden.
+Die Methode greift dabei auf bereits gefilterte historische Daten (StockData) zu, in denen keine nicht-handelsrelevanten Tage enthalten sind.
+
+✅ 2. Strategielogik: Entry-Signal
+Ein Einstiegssignal wird ausgelöst, wenn:
+
+am Vortag: shortMA ≤ longMA
+
+heute: shortMA > longMA
+
+→ Das entspricht einem klassischen Crossover von unten nach oben.
+
+✅ 3. Verbesserung der MA-Berechnung
+Anfangs wurde minusDays(i) verwendet, um zurückliegende Tage zu analysieren.
+Diese Methode konnte an Wochenenden oder fehlenden Tagen zu null-Ergebnissen führen.
+Die neue Berechnung nutzt nun alle vorhandenen Daten vor dem Zieltag, rückwärts sortiert und begrenzt auf n Tage.
+
+✅ 4. Warum es Unterschiede zur früheren Simulation gab
+Eine frühere Testsimulation hatte leichte Abweichungen beim Entry-Verhalten, da sie Pandas' rolling()-Logik verwendete,
+welche rein reihenbasiert arbeitet und nicht zwischen Handelstagen und Lücken unterscheidet.
+In deiner Engine führten präzise, datumsgesteuerte Berechnungen zu einem korrekten Einstieg am 27.09.2024,
+den die Python-Simulation zunächst nicht erkannte.
+
+✅ 5. Debug-Logging als Validierungswerkzeug
+Durch gezieltes Logging der MA-Werte (short, long, jeweils gestern und heute) konnte jedes Signal nachvollziehbar validiert werden.
+So wurde u. a. bestätigt, dass alle Einstiegssignale regelkonform ausgelöst wurden – inklusive Edge-Fällen wie am 27.09.2024.

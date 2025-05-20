@@ -1,0 +1,36 @@
+🧾 BuyTheDipStrategy – Übersicht
+Zweck:
+Strategie zur Eröffnung einer Position, wenn der Kurs im Vergleich zum Vortag stark gefallen ist (z. B. ≥ 3 %),
+und Schließen aller Positionen, wenn ein Gewinnziel erreicht ist (z. B. ≥ 5 %).
+
+Konstruktor:
+java
+Kopieren
+Bearbeiten
+BuyTheDipStrategy(Map<LocalDate, StockData> historicalData, double dipThreshold, double profitTarget)
+historicalData: Tageskurse nach Datum, um auf den Vortag zugreifen zu können
+
+dipThreshold: Einstiegsschwelle in Prozent (z. B. 3.0 = -3 %)
+
+profitTarget: Zielgewinn in Prozent für Verkauf (z. B. 5.0 = +5 %)
+
+Methode: shouldEnter(StockData today)
+Holt Kurs vom Vortag
+
+Rechnet: (gestern - heute) / gestern * 100
+
+Wenn Wert ≥ dipThreshold → Rückgabe true → Position wird eröffnet
+
+Methode: shouldExit(StockData today, Portfolio portfolio)
+Prüft alle offenen Positionen im Portfolio
+
+Wenn eine Position für dieselbe Aktie einen Gewinn ≥ profitTarget erzielt hat → Rückgabe true → alle Positionen werden verkauft
+
+Besonderheiten:
+Werte sind variabel (nicht hartcodiert), damit:
+
+Strategien im Frontend angepasst werden können
+
+dieselbe Strategie mehrfach mit anderen Parametern verwendet werden kann
+
+Nutzt BigDecimal für Kursvergleiche (wegen Genauigkeit)

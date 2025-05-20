@@ -2,6 +2,7 @@ import React from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
+import './EquityCurveChart.css';
 
 type EquityPoint = {
   date: string;
@@ -15,11 +16,12 @@ type StrategyEquity = {
 
 interface EquityCurveChartProps {
   strategies: StrategyEquity[];
+  height?: number;
 }
 
 const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00c49f"];
 
-const EquityCurveChart: React.FC<EquityCurveChartProps> = ({ strategies }) => {
+const EquityCurveChart: React.FC<EquityCurveChartProps> = ({ strategies, height = 400 }) => {
   // Nehme an, dass alle Strategien die gleiche Zeitreihe nutzen
   const mergedData = strategies[0].equityCurve.map((_, idx) => {
     const entry: any = { date: strategies[0].equityCurve[idx].date };
@@ -30,7 +32,7 @@ const EquityCurveChart: React.FC<EquityCurveChartProps> = ({ strategies }) => {
   });
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={height}>
       <LineChart data={mergedData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />

@@ -1,0 +1,41 @@
+com.example.FinTech
+│
+├── alpaca
+│   ├── entity
+│   ├── repository
+│   ├── ...
+│
+├── engine                         # 🔥 NEU: Kern deiner Simulationslogik
+│   ├── strategy                   # Strategien wie BuyTheDip
+│   ├── model                      # Position, Order, Trade etc.
+│   └── SimulationEngine.java      # zentrale Steuerung
+│
+├── service                        # z.B. SimulationService
+│   └── StrategyExecutor.java      # zur Anbindung an Strategien
+│
+├── controller                     # REST-Schnittstelle
+│   └── SimulationController.java
+│
+├── dto                            # Datenobjekte für Requests/Responses
+│   ├── SimulationRequest.java
+│   └── SimulationResponse.java
+
+
+🔧 Wie es zusammenspielt (grob):
+alpaca:
+🔌 Holt Marktdaten → stellt sie engine zur Verfügung.
+
+engine:
+🧠 Verarbeitet Strategien → führt Käufe/Verkäufe durch → erzeugt Ergebnisse.
+
+strategy:
+📊 Enthält jede Handelsstrategie (z.B. BuyTheDipStrategy).
+
+service:
+🎛️ Koordiniert Simulation, bindet engine, alpaca und controller zusammen.
+
+controller:
+🌐 REST-Endpunkte → Start Simulation, Abfrage Ergebnisse
+
+dto:
+🧾 Simulationsdaten rein/raus (z.B. Zeitraum, Aktienliste, Strategieauswahl)

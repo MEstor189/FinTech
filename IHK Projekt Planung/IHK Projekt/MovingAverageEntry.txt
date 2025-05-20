@@ -1,0 +1,130 @@
+🧾 MovingAverageEntryStrategy – Übersicht
+📌 Zweck:
+Die Strategie prüft, ob der kurzfristige gleitende Durchschnitt (Short MA)
+den langfristigen gleitenden Durchschnitt (Long MA) von unten nach oben kreuzt.
+Dies wird als bullishes Einstiegssignal gewertet (Trendwende nach oben).
+
+📐 Parameter:
+Name	Beschreibung	Standardwert
+shortPeriod	Anzahl Tage für kurzfristigen Durchschnitt	5
+longPeriod	Anzahl Tage für langfristigen Durchschnitt	20
+
+🧠 Funktionsweise:
+
+🧠 Einfach gesagt:
+Du beobachtest zwei Durchschnitte:
+
+Kurzfristiger Durchschnitt (z. B. 5 Tage)
+
+Langfristiger Durchschnitt (z. B. 20 Tage)
+
+Und:
+
+Gestern war der kurze Durchschnitt gleich oder unterhalb des langen
+
+Heute ist der kurze Durchschnitt darüber
+
+➜ Dann ist das ein bullishes Kaufsignal, und du kaufst.
+
+📊 Warum macht man das?
+Wenn der kurzfristige Trend stärker wird als der langfristige,
+signalisiert das oft eine Aufwärtsdynamik
+
+Viele Trader und Algorithmen nutzen dieses Signal
+
+
+
+
+
+
+
+Berechnet:
+
+shortAvgToday, longAvgToday
+
+shortAvgYesterday, longAvgYesterday
+
+Vergleich:
+
+Wenn gestern: shortAvg <= longAvg
+
+und heute: shortAvg > longAvg
+
+➜ Dann Rückgabe true → Einstiegssignal
+
+📌 Anforderungen:
+Funktioniert nur, wenn genug historische Daten vorhanden sind (mind. longPeriod + 1 Tage)
+
+Nutzt interne Map<LocalDate, StockData> zur Durchschnittsberechnung
+
+Rückgabe false, wenn Datenlücken auftreten
+
+🧩 Typische Kombination:
+Diese Entry-Strategie wird oft kombiniert mit:
+
+TargetProfitExitStrategy
+
+TrailingStopExitStrategy
+
+MovingAverageExitStrategy (inverse Kreuzung)
+
+✅ Realitätsnahe Strategie mit trendbasiertem Einstieg
+✅ Konfigurierbar, wiederverwendbar, einfach zu kombinieren
+
+Beispiel:
+
+🧪 Beispiel: Moving Average Crossover
+📌 Annahme:
+shortPeriod = 3
+
+longPeriod = 5
+
+📊 Kursverlauf:
+Datum	Schlusskurs (Close)
+2024-01-05	100.0
+2024-01-06	101.0
+2024-01-07	102.0
+2024-01-08	103.0
+2024-01-09	104.0
+2024-01-10	106.0 ← heute
+
+🧠 Berechnung am 2024-01-10:
+1. Gleitende Durchschnitte:
+📆 Am 2024-01-09 (gestern):
+Short MA (3 Tage): Durchschnitt von 101.0, 102.0, 103.0 → 102.0
+
+Long MA (5 Tage): Durchschnitt von 100.0 bis 104.0 → 102.0
+
+→ short <= long ✅
+
+📆 Am 2024-01-10 (heute):
+Short MA: 102.0, 103.0, 104.0 → 103.0
+
+Long MA: 101.0 bis 106.0 → 103.2
+
+→ short < long ❌ ➜ Kein Kauf
+
+Jetzt nehmen wir leicht andere Werte:
+Datum	Close
+2024-01-06	101.0
+2024-01-07	102.0
+2024-01-08	103.0
+2024-01-09	104.0
+2024-01-10	108.0 ← heute
+
+Jetzt:
+Short MA (3): 103.0, 104.0, 108.0 → 105.0
+
+Long MA (5): 101.0, 102.0, 103.0, 104.0, 108.0 → 103.6
+
+Gestern:
+
+Short = 102.0, Long = 102.4 → short <= long
+Heute:
+
+Short = 105.0, Long = 103.6 → short > long ✅
+
+➡️ Bedingung erfüllt → Rückgabe true → Kaufsignal!
+
+✅ Dieses Beispiel zeigt, dass die Methode den Trendwechsel von „unterhalb“ nach „oberhalb“ der langen Linie erkennt
+→ typisches Einstiegssignal im Trendfolgehandel.

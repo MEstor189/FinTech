@@ -1,0 +1,137 @@
+🧾 Projekt-Zusammenfassung – Session: Exit-Strategien & Architekturentscheidungen
+Projekt: Simulationsengine für Handelsstrategien
+Technologie: Java, Spring Boot, React, MySQL, Alpaca API
+Kontext: Strategie-Modul im Backend – Entry- und Exit-Logik für Simulationen
+
+✅ Ziel der Session
+Erweiterung der Simulationsengine um mindestens zwei Exit-Strategien, die sowohl Gewinnrealisierung als auch realistische Logik abbilden.
+Ziel war zudem saubere Architektur, Wiederverwendbarkeit und Vorbereitung für Dokumentation und Wartbarkeit.
+
+🔁 Bereits vorhanden
+Entry-Strategien:
+
+BuyTheDipEntry
+
+MovingAverageEntry
+
+MomentumEntry
+
+Exit-Strategien:
+
+TargetProfitExit (Basis)
+
+Globale Exit-Logik:
+Sobald eine Position das Exit-Kriterium erfüllt → alle Positionen werden geschlossen (aus Engine-Summary bekannt)
+
+✅ Neu erstellte Exit-Strategien
+1. TrailingStopExit
+Position wird geschlossen, sobald Kurs um X % vom bisherigen Maximum seit Kauf gefallen ist.
+
+Wichtige Elemente:
+
+java
+Kopieren
+Bearbeiten
+double stopPrice = maxPrice * (1 - trailingStopPercent);
+if (currentClose <= stopPrice) {
+    return true;
+}
+updateMaxPrice() wird direkt in shouldExit(...) aufgerufen, um die Engine universell zu halten
+
+Simulation wurde angepasst auf parallele Käufe + globales Exit
+
+Realistische Ergebnisse bei AAPL-Testdaten erzielt
+
+2. MovingAverageCrossExit
+Exit bei Crossover von gleitenden Durchschnitten – z. B. MA(3) fällt unter MA(10)
+
+Logik:
+
+java
+Kopieren
+Bearbeiten
+return shortMA_yesterday >= longMA_yesterday
+    && shortMA_today < longMA_today;
+Parameter per JSON:
+
+json
+Kopieren
+Bearbeiten
+"exitStrategyType": "MOVING_AVERAGE_CROSS",
+"exitParams": {
+  "shortPeriod": 3,
+  "longPeriod": 10
+}
+🔧 Überarbeitung der Entry-Strategie MovingAverageEntry
+Die lokale Methode calculateAverage(...) wurde durch die gemeinsame MovingAverageUtil.calculateAverage(...) ersetzt
+
+Robuste Berechnung inkl. Sortierung und Fallback bei fehlenden Daten
+
+Nutzung von getPreviousTradingDay(...) statt minusDays(1) für saubere Handelstag-Logik
+
+🛠️ Utility-Klassen – Status & Entscheidung
+Diskussion & Brainstorming geführt, aber:
+
+Aktuell keine Utility-Klassen notwendig, da keine Redundanz besteht.
+Entscheidung: erst auslagern, wenn Code mehrfach auftritt
+
+Geplante Helfer bei Bedarf:
+
+Prozentänderung: percentChange(from, to)
+
+Crossover-Logik: hasCrossover(...)
+
+Gleitende Durchschnitte: calculateAverage(...)
+
+Handelstagsfilterung: getNthTradingDayBefore(...)
+
+🔬 Tests & Simulation
+AAPL-Kursdaten vom 01.07.2024 bis 01.01.2025 getestet
+
+Simulation angepasst:
+
+Parallele Käufe erlaubt
+
+Verkauf aller Positionen bei Exit-Trigger
+
+Beispiel-Trade-Logik erfolgreich validiert gegen reale Simulations-Response
+
+📄 Beispiel-Request (Body)
+json
+Kopieren
+Bearbeiten
+{
+  "symbol": "AAPL",
+  "startDate": "2024-07-01",
+  "endDate": "2025-01-01",
+  "entryStrategyType": "MOVING_AVERAGE",
+  "exitStrategyType": "MOVING_AVERAGE_CROSS",
+  "entryParams": {
+    "shortPeriod": 2,
+    "longPeriod": 3
+  },
+  "exitParams": {
+    "shortPeriod": 3,
+    "longPeriod": 10
+  },
+  "investmentPerTrade": 100.0
+}
+🧠 Architekturentscheidungen & Best Practices
+Strategien sollen rein sein (keine Abhängigkeit zur Engine oder anderen Services)
+
+Portfolio verwaltet maxPrice je Position
+
+shouldExit(...) darf Zustände anpassen, z. B. maxPrice aktualisieren
+
+Utilitys werden nur gebaut, wenn sich Wiederholung konkret ergibt
+
+MovingAverageUtil korrekt nach Bedarf modularisiert
+
+🔚 Aktueller Stand (Session-Ende)
+Zwei zusätzliche Exit-Strategien implementiert, getestet und integriert
+
+Einheitliche, robuste MA-Berechnung für Entry & Exit
+
+Utility-Vorbereitung durchgeführt, aber bewusst zurückgestellt
+
+Projekt ist einsatzbereit für weitere Strategien, Backtests oder Auswertungen

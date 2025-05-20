@@ -1,0 +1,184 @@
+🧾 Projektzusammenfassung – Simulationsengine für Handelsstrategien (Java + Spring Boot)
+🧱 Architektur & Aufbau
+Technologie-Stack: Java, Spring Boot, Maven, MySQL, Alpaca API
+
+Ordnerstruktur:
+
+engine/ → enthält Simulationslogik
+
+engine/model/ → Trade, Position, Portfolio, SimulationResult
+
+engine/strategy/ → Entry- & Exit-Strategien + StrategyFactory
+
+dto/ → SimulationRequest, SimulationResponse
+
+service/ → SimulationService
+
+controller/ → SimulationController
+
+Einstiegspunkt: Application.java
+
+Logger: SLF4J, in allen relevanten Klassen eingesetzt
+
+🔄 Simulationsablauf (grob)
+Request kommt über /api/simulation mit:
+
+Symbol, Zeitraum
+
+Entry- & Exit-Strategietyp + Parameter
+
+Betrag pro Trade
+
+SimulationService:
+
+Holt Kursdaten aus der DB (StockDataRepository)
+
+Baut Map<LocalDate, StockData> für Strategie
+
+Verwendet StrategyFactory zur Erzeugung der Entry-/Exit-Strategien
+
+Startet SimulationEngine
+
+SimulationEngine:
+
+Iteriert durch Kursdaten
+
+Prüft shouldEnter() → eröffnet Position
+
+Prüft shouldExit() → verkauft alle offenen Positionen
+
+Gibt SimulationResult zurück
+
+Response wird zurückgegeben als JSON → SimulationResponse
+
+⚙️ Strategie-Konzept
+🔁 Trennung von Entry- & Exit-Strategien
+Entry und Exit sind getrennte Interfaces:
+
+EntryStrategy: definiert boolean shouldEnter(StockData)
+
+ExitStrategy: definiert boolean shouldExit(StockData, Portfolio)
+
+Dadurch können Strategien beliebig kombiniert werden
+
+🧠 Entry-Strategien
+✅ BuyTheDipEntry
+Einstieg bei Kursrückgang (z. B. -3 % zum Vortag)
+
+Vortagskurs muss vorhanden sein
+
+Robust gegen fehlende Tage
+
+✅ MovingAverageEntry
+Einstieg bei Crossover: MA(short) <= MA(long) gestern und MA(short) > MA(long) heute
+
+Spezialbehandlung: gleitender Durchschnitt nur über echte Handelstage
+
+Verbesserte Methode ohne minusDays(i), sondern über sortierte Handelstage
+
+💡 Exit-Strategien
+✅ TargetProfitExit
+Exit bei definiertem Gewinnziel (z. B. +2 %)
+
+Sobald eine Position das Ziel erreicht, werden alle offenen Positionen liquidiert
+
+🏭 StrategyFactory
+Nimmt StrategyType (enum), historische Daten, Parametermap
+
+Erstellt Entry- und Exit-Strategien mit Defaultwerten oder benutzerdefinierten Werten
+
+Ermöglicht einfache Erweiterung um neue Strategietypen
+
+📋 DTOs (Datenobjekte)
+SimulationRequest
+Symbol, Start-/Enddatum
+
+entryStrategyType, exitStrategyType
+
+entryParams, exitParams als Map
+
+investmentPerTrade
+
+SimulationResponse
+List<Trade>
+
+TotalProfit, AverageHoldingDays, TradeCount
+
+📌 Sonstige Regeln & Vereinfachungen
+Mehrere parallele Käufe erlaubt
+
+Globaler Exit: sobald eine Position das Exit-Kriterium erfüllt → alle Positionen werden verkauft
+
+Keine Stop-Loss-Regel (nur Gewinnziel oder Simulationsende)
+
+Datenquelle: Kurse aus MySQL, nicht direkt von der API
+
+Logger zur Validierung der Entry-/Exit-Entscheidungen eingebaut
+
+✅ Testlaufbeispiele
+Strategien wurden mehrfach erfolgreich getestet (z. B. MovingAverageEntry + TargetProfitExit)
+
+Daten aus Juli–Oktober 2024 für AAPL verwendet
+
+Entry-/Exit-Entscheidungen durch Logging belegbar
+
+
+
+
+Exmaple Bodys für die 3 entry strategies:
+
+✅ 1. BuyTheDipEntry + TargetProfitExit
+json
+Kopieren
+Bearbeiten
+{
+  "symbol": "AAPL",
+  "startDate": "2024-07-01",
+  "endDate": "2024-10-01",
+  "entryStrategyType": "BUY_THE_DIP",
+  "exitStrategyType": "TARGET_PROFIT",
+  "entryParams": {
+    "dipThreshold": 2.5
+  },
+  "exitParams": {
+    "profitTarget": 3.0
+  },
+  "investmentPerTrade": 100.0
+}
+✅ 2. MovingAverageEntry + TargetProfitExit
+json
+Kopieren
+Bearbeiten
+{
+  "symbol": "AAPL",
+  "startDate": "2024-07-01",
+  "endDate": "2024-10-01",
+  "entryStrategyType": "MOVING_AVERAGE",
+  "exitStrategyType": "TARGET_PROFIT",
+  "entryParams": {
+    "shortPeriod": 2,
+    "longPeriod": 3
+  },
+  "exitParams": {
+    "profitTarget": 2.0
+  },
+  "investmentPerTrade": 100.0
+}
+✅ 3. MomentumEntry + TargetProfitExit
+json
+Kopieren
+Bearbeiten
+{
+  "symbol": "AAPL",
+  "startDate": "2024-07-01",
+  "endDate": "2024-10-01",
+  "entryStrategyType": "MOMENTUM",
+  "exitStrategyType": "TARGET_PROFIT",
+  "entryParams": {
+    "momentumDays": 3
+  },
+  "exitParams": {
+    "profitTarget": 2.0
+  },
+  "investmentPerTrade": 100.0
+}

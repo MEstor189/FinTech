@@ -2,6 +2,7 @@ import React from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Scatter
 } from "recharts";
+import './PriceChart.css';
 
 type PricePoint = {
   date: string;
@@ -23,9 +24,10 @@ interface PriceChartProps {
     short?: MovingAverage[];
     long?: MovingAverage[];
   };
+  height?: number;
 }
 
-const PriceChart: React.FC<PriceChartProps> = ({ priceSeries, trades, movingAverages }) => {
+const PriceChart: React.FC<PriceChartProps> = ({ priceSeries, trades, movingAverages, height = 400 }) => {
   const mergedData = priceSeries.map((p) => ({
     ...p,
     shortMA: movingAverages?.short?.find((ma) => ma.date === p.date)?.value,
@@ -36,7 +38,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ priceSeries, trades, movingAver
   const sellPoints = trades.filter((t) => t.type === "SELL");
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={height}>
       <LineChart data={mergedData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
