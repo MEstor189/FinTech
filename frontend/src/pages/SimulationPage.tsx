@@ -5,6 +5,7 @@ import ChartSwitcher, { ChartType } from '../components/charts/ChartSwitcher';
 import EquityCurveChart from '../components/charts/EquityCurveChart';
 import PriceChart from '../components/charts/PriceChart';
 import StrategyCompareChart from '../components/charts/StrategyCompareChart';
+import PerformanceChart from '../components/charts/PerformanceChart';
 import './SimulationPage.css';
 
 // Test-Strategien (später durch echte Daten ersetzen)
@@ -111,6 +112,26 @@ const movingAverages = {
   ],
 };
 
+// Ersetze die dummyEquityA und dummyEquityB mit Performance-Daten
+const dummyPerformanceA = [
+  { date: '2024-01-01', performance: 0 },
+  { date: '2024-02-01', performance: 5 },
+  { date: '2024-03-01', performance: 10 },
+  { date: '2024-04-01', performance: 15 }
+];
+
+const dummyPerformanceB = [
+  { date: '2024-01-01', performance: 0 },
+  { date: '2024-02-01', performance: 2 },
+  { date: '2024-03-01', performance: 8 },
+  { date: '2024-04-01', performance: 12 }
+];
+
+const dummyMetrics = [
+  { name: 'Strategie A', totalProfit: 950, averageHoldingDays: 9.8, tradeCount: 10, winRate: 60, maxDrawdown: 5 },
+  { name: 'Strategie B', totalProfit: 800, averageHoldingDays: 11.4, tradeCount: 10, winRate: 55, maxDrawdown: 7 },
+];
+
 export default function SimulationPage() {
   const [strategyA, setStrategyA] = useState('');
   const [strategyB, setStrategyB] = useState('');
@@ -118,14 +139,6 @@ export default function SimulationPage() {
   const [symbol, setSymbol] = useState('AAPL');
   const [simulationStarted, setSimulationStarted] = useState(false);
   const [selectedChart, setSelectedChart] = useState<ChartType>('equity');
-
-  // Platzhalterdaten für die Charts (später durch echte Simulationsdaten ersetzen)
-  const dummyEquityA = [{ date: '2024-01-01', value: 10000 }, { date: '2024-02-01', value: 10500 }, { date: '2024-03-01', value: 11000 }, { date: '2024-04-01', value: 11500 }];
-  const dummyEquityB = [{ date: '2024-01-01', value: 10000 }, { date: '2024-02-01', value: 10200 }, { date: '2024-03-01', value: 10800 }, { date: '2024-04-01', value: 11200 }];
-  const dummyMetrics = [
-    { name: 'Strategie A', totalProfit: 950, averageHoldingDays: 9.8, tradeCount: 10, winRate: 60, maxDrawdown: 5 },
-    { name: 'Strategie B', totalProfit: 800, averageHoldingDays: 11.4, tradeCount: 10, winRate: 55, maxDrawdown: 7 },
-  ];
 
   const handleStart = () => {
     setSimulationStarted(true);
@@ -173,11 +186,17 @@ export default function SimulationPage() {
                   <>
                     <div className="chart-container">
                       <Typography variant="h4" align="center" className="chart-title-blue">{strategyA || 'Strategie A'}</Typography>
-                      <EquityCurveChart strategies={[{ name: strategyB || 'StrategieA', equityCurve: dummyEquityA }]} height={600} />
+                      <PerformanceChart 
+                        strategies={[{ name: strategyA || 'StrategieA', data: dummyPerformanceA }]} 
+                        height={600} 
+                      />
                     </div>
                     <div className="chart-container">
                       <Typography variant="h4" align="center" className="chart-title-pink">{strategyB || 'Strategie B'}</Typography>
-                      <EquityCurveChart strategies={[{ name: strategyA || 'StrategieB', equityCurve: dummyEquityB }]} height={600} />
+                      <PerformanceChart 
+                        strategies={[{ name: strategyB || 'StrategieB', data: dummyPerformanceB }]} 
+                        height={600} 
+                      />
                     </div>
                   </>
                 )}
