@@ -5,6 +5,10 @@ import {
   Paper,
 } from '@mui/material';
 import SimulationControlBar from '../components/SimulationControlBar';
+import ChartSwitcher, { ChartType } from '../components/charts/ChartSwitcher';
+import EquityCurveChart from '../components/charts/EquityCurveChart';
+import PriceChart from '../components/charts/PriceChart';
+import StrategyCompareChart from '../components/charts/StrategyCompareChart';
 
 // Test-Strategien (später durch echte Daten ersetzen)
 const TEST_STRATEGIES = [
@@ -30,6 +34,25 @@ export default function SimulationPage() {
   const [timeframe, setTimeframe] = useState('01.01.2024-01.04.2024');
   const [symbol, setSymbol] = useState('AAPL');
   const [simulationStarted, setSimulationStarted] = useState(false);
+  const [selectedChart, setSelectedChart] = useState<ChartType>('equity');
+
+  // Platzhalterdaten für die Charts (später durch echte Simulationsdaten ersetzen)
+  const dummyEquityA = [{ date: '2024-01-01', value: 10000 }, { date: '2024-02-01', value: 10500 }, { date: '2024-03-01', value: 11000 }, { date: '2024-04-01', value: 11500 }];
+  const dummyEquityB = [{ date: '2024-01-01', value: 10000 }, { date: '2024-02-01', value: 10200 }, { date: '2024-03-01', value: 10800 }, { date: '2024-04-01', value: 11200 }];
+  const dummyPrice = [
+    { date: '2024-01-01', close: 150 },
+    { date: '2024-02-01', close: 160 },
+    { date: '2024-03-01', close: 170 },
+    { date: '2024-04-01', close: 180 },
+  ];
+  const dummyTrades = [
+    { date: '2024-01-15', type: 'BUY' as const, price: 152 },
+    { date: '2024-03-10', type: 'SELL' as const, price: 175 },
+  ];
+  const dummyMetrics = [
+    { name: 'Strategie A', totalProfit: 950, averageHoldingDays: 9.8, tradeCount: 10, winRate: 60, maxDrawdown: 5 },
+    { name: 'Strategie B', totalProfit: 800, averageHoldingDays: 11.4, tradeCount: 10, winRate: 55, maxDrawdown: 7 },
+  ];
 
   const handleStart = () => {
     setSimulationStarted(true);
@@ -73,32 +96,53 @@ export default function SimulationPage() {
           onStart={handleStart}
         />
 
-        {/* Hier können weitere Simulationsinhalte folgen */}
         <Typography variant="h6" sx={{ color: '#a259ff', mb: 3 }}>
           Simulationsergebnisse
         </Typography>
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center',
-          height: 'calc(100% - 100px)',
-          color: '#666'
+        <Box sx={{
+          minHeight: 420,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
         }}>
           {!simulationStarted ? (
             'Bitte wählen Sie Strategien, Zeitraum und Symbol und starten Sie die Simulation.'
           ) : (
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Strategie A: {strategyA || '-'}<br />
-                Strategie B: {strategyB || '-'}
-              </Typography>
-              <Typography variant="body2">
-                Zeitraum: {timeframe}
-              </Typography>
-              <Typography variant="body2">
-                Symbol: {symbol}
-              </Typography>
-            </Box>
+            <>
+              <ChartSwitcher selectedChart={selectedChart} onChange={setSelectedChart} />
+              <Box sx={{ display: 'flex', gap: 4 }}>
+                {selectedChart === 'equity' && (
+                  <>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="h6" sx={{ color: '#5a6aff', mb: 1 }}>Strategie2</Typography>
+                      <EquityCurveChart strategies={[{ name: 'Strategie2', equityCurve: dummyEquityA }]} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="h6" sx={{ color: '#ff4fd8', mb: 1 }}>Strategie1</Typography>
+                      <EquityCurveChart strategies={[{ name: 'Strategie1', equityCurve: dummyEquityB }]} />
+                    </Box>
+                  </>
+                )}
+                {selectedChart === 'price' && (
+                  <>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="h6" sx={{ color: '#5a6aff', mb: 1 }}>Strategie2</Typography>
+                      <PriceChart priceSeries={dummyPrice} trades={dummyTrades} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="h6" sx={{ color: '#ff4fd8', mb: 1 }}>Strategie1</Typography>
+                      <PriceChart priceSeries={dummyPrice} trades={dummyTrades} />
+                    </Box>
+                  </>
+                )}
+                {selectedChart === 'compare' && (
+                  <Box sx={{ flex: 1 }}>
+                    <StrategyCompareChart strategies={dummyMetrics} />
+                  </Box>
+                )}
+              </Box>
+            </>
           )}
         </Box>
       </Paper>
