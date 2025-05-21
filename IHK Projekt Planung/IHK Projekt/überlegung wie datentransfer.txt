@@ -6,3 +6,27 @@ oder
 
 
 alle daten werden am anfang bom backend ans frontend geschickt und das speichert es dann ab und nimmt nur die daten für den jeweiligen chart?
+
+
+🔀 Vergleich der beiden Ansätze
+Kriterium	🔁 Daten je nach Chart (lazy load)	📦 Alle Daten beim Start holen (eager load)
+API-Aufrufe	Mehrere, je nach Chart-Auswahl	Nur ein einziger beim Simulationsstart
+Initiale Ladezeit	Schnell (wenig Daten)	Etwas länger (mehr Datenmenge)
+Komplexität im Code	Höher (State-Management + Ladezustände pro Chart)	Einfacher (einmal laden, dann filtern)
+Benutzererlebnis	Ladezeit/Spinner bei jedem Chart-Wechsel	Schneller Wechsel zwischen Charts
+Skalierbarkeit bei großen Datenmengen	Besser für sehr große Simulationen	Könnte bei sehr langen Simulationen kritisch werden
+Fehleranfälligkeit	Höher (mehr API-Kommunikation = mehr potenzielle Fehlerquellen)	Robuster, da einmaliger Datentransfer
+
+🟢 Empfehlung für dein Projekt (IHK, PoC, überschaubarer Umfang):
+👉 Alle Daten beim Simulationsstart einmal berechnen und an das Frontend schicken
+→ Frontend speichert die Daten lokal (z. B. in useState) und zeigt je nach Chart nur den relevanten Teil an.
+
+Warum das besser ist:
+✅ Du hast nur einen API-Aufruf, den du sauber testen und loggen kannst.
+
+✅ Dein Chart-Wechsel im UI ist instant (kein Nachladen, kein Spinner nötig).
+
+✅ Du vermeidest komplexes Caching, State-Switching und race conditions.
+
+✅ Deine Datenmenge bleibt beherrschbar, weil du ja nur eine Aktie + Zeitraum + 2 Strategien simulierst.
+
