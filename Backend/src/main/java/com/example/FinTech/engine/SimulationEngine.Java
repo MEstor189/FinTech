@@ -1,7 +1,6 @@
 package com.example.FinTech.engine;
 
 import com.example.FinTech.alpaca.entity.StockData;
-
 import com.example.FinTech.engine.model.*;
 import com.example.FinTech.engine.strategy.entry.EntryStrategy;
 import com.example.FinTech.engine.strategy.exit.ExitStrategy;

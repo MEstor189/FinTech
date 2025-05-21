@@ -1,9 +1,16 @@
 package com.example.FinTech.controller;
 
-import com.example.FinTech.dto.SimulationRequest;
-import com.example.FinTech.dto.SimulationResponse;
+
+import com.example.FinTech.dto.request.SimulationRequest;
+import com.example.FinTech.dto.request.SimulationRequestStrategy;
+import com.example.FinTech.dto.response.SimulationResponse;
+import com.example.FinTech.dto.response.SimulationResponseStrategyData;
 import com.example.FinTech.engine.model.SimulationResult;
 import com.example.FinTech.service.SimulationService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +29,38 @@ public class SimulationController {
 
     @PostMapping
     public SimulationResponse runSimulation(@RequestBody SimulationRequest request) {
-        logger.info("POST /api/simulation called for symbol {} with EntryStrategy {} and ExitStrategy {}", request.getSymbol(),
-                request.getEntryStrategyType(),request.getExitStrategyType());
-
-        SimulationResult result = simulationService.runSimulation(request);
-
-        return new SimulationResponse(
+         logger.info("POST /api/simulation called for symbol {} with Strategys {} ", request.getSymbol(),
+                request.getRequestStrategies()); 
+        
+        List<SimulationResponseStrategyData> responseDatas = new ArrayList<>();
+        
+        for (SimulationRequestStrategy sRequestStrategy : request.getRequestStrategies()) {
+            SimulationResult result = simulationService.runSimulation(sRequestStrategy, request.getSymbol(), request.getStartDate(), request.getEndDate(), request.getInvestmentPerTrade());
+            SimulationResponseStrategyData strategy= new SimulationResponseStrategyData(
+                sRequestStrategy.getStrategyName(),
                 result.getTrades(),
                 result.getTotalProfit(),
                 result.getAverageHoldingDays(),
-                result.getTradeCount());
+                result.getTradeCount(),
+                sRequestStrategy.getEntryStrategyType(),
+                sRequestStrategy.getExitStrategyType(),
+                sRequestStrategy.getEntryParams(),
+                sRequestStrategy.getExitParams()
+                );
+            logger.info("Strategy Name: {}",strategy.getStrategyName());
+            responseDatas.add(strategy);     
+        }
+   
+        return new SimulationResponse(
+            responseDatas,
+            request.getStartDate(),
+            request.getEndDate(),
+            request.getSymbol(),
+            request.getInvestmentPerTrade(),
+            simulationService.getStockDataDtoForSymbol(request.getSymbol(), request.getStartDate(), request.getEndDate())
+        );
+
+        
     }
 
 }

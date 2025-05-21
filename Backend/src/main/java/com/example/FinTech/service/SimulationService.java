@@ -2,13 +2,15 @@ package com.example.FinTech.service;
 
 import com.example.FinTech.alpaca.entity.StockData;
 import com.example.FinTech.alpaca.repository.StockDataRepository;
-import com.example.FinTech.dto.SimulationRequest;
+import com.example.FinTech.dto.request.SimulationRequestStrategy;
+import com.example.FinTech.dto.stockDataDto.StockDataDTO;
 import com.example.FinTech.engine.SimulationEngine;
 import com.example.FinTech.engine.model.SimulationResult;
 import com.example.FinTech.engine.strategy.entry.EntryStrategy;
 import com.example.FinTech.engine.strategy.entry.EntryStrategyFactory;
 import com.example.FinTech.engine.strategy.exit.ExitStrategy;
 import com.example.FinTech.engine.strategy.exit.ExitStrategyFactory;
+import com.example.FinTech.mapper.StockDataMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,19 +30,19 @@ public class SimulationService {
         this.stockDataRepository = stockDataRepository;
     }
 
-    public SimulationResult runSimulation(SimulationRequest request) {
-        logger.info("Starting simulation for symbol {} using EntryStrategy {} and ExitStrategy {}", request.getSymbol(),
+    public SimulationResult runSimulation(SimulationRequestStrategy request, String symbol, LocalDate sDate, LocalDate eDate, double investmentPerTrade){
+        logger.info("Starting simulation for symbol {} using EntryStrategy {} and ExitStrategy {}", symbol,
                 request.getEntryStrategyType(),request.getExitStrategyType());
 
         // 1. get data from DB
         List<StockData> dataList = stockDataRepository.findAllBySymbolAndTradeDateBetweenOrderByTradeDateAsc(
-                request.getSymbol(),
-                request.getStartDate(),
-                request.getEndDate());
+                symbol,
+                sDate,
+                eDate);
 
         if (dataList.isEmpty()) {
-            logger.warn("No stock data found for {} between {} and {}", request.getSymbol(), request.getStartDate(),
-                    request.getEndDate());
+            logger.warn("No stock data found for {} between {} and {}", symbol, sDate,
+                    eDate);
             throw new IllegalArgumentException("No data available for the selected period and symbol.");
         }
 
@@ -62,10 +64,15 @@ public class SimulationService {
                 request.getExitParams() != null ? request.getExitParams() : new HashMap<>());
 
         // 4. SimulationEngine start
-        SimulationEngine engine = new SimulationEngine(entryStrategy, exitStrategy, request.getInvestmentPerTrade());
+        SimulationEngine engine = new SimulationEngine(entryStrategy, exitStrategy, investmentPerTrade);
         SimulationResult result = engine.runSimulation(dataList);
 
         logger.info("Simulation completed. Trades executed: {}", result.getTradeCount());
         return result;
     }
+
+    public List<StockDataDTO> getStockDataDtoForSymbol(String symbol, LocalDate sDate, LocalDate eDate) {
+    List<StockData> stockData = stockDataRepository.findAllBySymbolAndTradeDateBetweenOrderByTradeDateAsc(symbol, sDate, eDate);
+    return StockDataMapper.toDtoList(stockData);
+}
 }
