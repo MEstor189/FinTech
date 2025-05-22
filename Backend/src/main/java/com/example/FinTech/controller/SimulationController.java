@@ -5,8 +5,8 @@ import com.example.FinTech.dto.request.SimulationRequest;
 import com.example.FinTech.dto.request.SimulationRequestStrategy;
 import com.example.FinTech.dto.response.SimulationResponse;
 import com.example.FinTech.dto.response.SimulationResponseStrategyData;
-import com.example.FinTech.engine.model.SimulationResult;
 import com.example.FinTech.service.SimulationService;
+import com.example.FinTech.simulation.model.SimulationResult;
 
 import java.util.ArrayList;
 import java.util.List;

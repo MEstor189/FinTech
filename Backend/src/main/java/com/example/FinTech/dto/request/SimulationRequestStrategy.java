@@ -2,8 +2,8 @@ package com.example.FinTech.dto.request;
 
 import java.util.Map;
 
-import com.example.FinTech.engine.strategy.entry.EntryStrategyType;
-import com.example.FinTech.engine.strategy.exit.ExitStrategyType;
+import com.example.FinTech.simulation.strategy.entry.EntryStrategyType;
+import com.example.FinTech.simulation.strategy.exit.ExitStrategyType;
 
 
 

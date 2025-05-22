@@ -3,9 +3,9 @@ package com.example.FinTech.dto.response;
 import java.util.List;
 import java.util.Map;
 
-import com.example.FinTech.engine.model.Trade;
-import com.example.FinTech.engine.strategy.entry.EntryStrategyType;
-import com.example.FinTech.engine.strategy.exit.ExitStrategyType;
+import com.example.FinTech.simulation.model.Trade;
+import com.example.FinTech.simulation.strategy.entry.EntryStrategyType;
+import com.example.FinTech.simulation.strategy.exit.ExitStrategyType;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({

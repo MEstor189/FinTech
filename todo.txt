@@ -1,14 +1,12 @@
-Backend Engine:
+strategien in db speichern
+
+strategien von db an Frontend
+
+charts schöner machen
+
+stockdata für andere symbols
 
 
- (Hilfsmethoden für Prozentberechnung, Kursvergleich, etc.)
-
-Frontend:
-
-1. Layout
 
 
-Note: Im Frontend werden dann die entry & exit strategien prebuild für die vordefinierten strategien
-
-
-Nebenbei: Notizen für Dokumentation später
+(docker?)

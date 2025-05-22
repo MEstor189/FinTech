@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.FinTech.alpaca.entity.StockData;
-import com.example.FinTech.alpaca.repository.StockDataRepository;
+import com.example.FinTech.persistence.entity.StockData;
+import com.example.FinTech.persistence.repository.StockDataRepository;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.openapi.marketdata.model.StockBarsRespSingle;

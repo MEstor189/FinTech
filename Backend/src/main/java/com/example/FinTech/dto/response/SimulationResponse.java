@@ -3,7 +3,7 @@ package com.example.FinTech.dto.response;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.FinTech.dto.stockDataDto.StockDataDTO;
+import com.example.FinTech.dto.stock.StockDataDTO;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({

@@ -1,16 +1,16 @@
 package com.example.FinTech.service;
 
-import com.example.FinTech.alpaca.entity.StockData;
-import com.example.FinTech.alpaca.repository.StockDataRepository;
 import com.example.FinTech.dto.request.SimulationRequestStrategy;
-import com.example.FinTech.dto.stockDataDto.StockDataDTO;
-import com.example.FinTech.engine.SimulationEngine;
-import com.example.FinTech.engine.model.SimulationResult;
-import com.example.FinTech.engine.strategy.entry.EntryStrategy;
-import com.example.FinTech.engine.strategy.entry.EntryStrategyFactory;
-import com.example.FinTech.engine.strategy.exit.ExitStrategy;
-import com.example.FinTech.engine.strategy.exit.ExitStrategyFactory;
+import com.example.FinTech.dto.stock.StockDataDTO;
 import com.example.FinTech.mapper.StockDataMapper;
+import com.example.FinTech.persistence.entity.StockData;
+import com.example.FinTech.persistence.repository.StockDataRepository;
+import com.example.FinTech.simulation.engine.SimulationEngine;
+import com.example.FinTech.simulation.model.SimulationResult;
+import com.example.FinTech.simulation.strategy.entry.EntryStrategy;
+import com.example.FinTech.simulation.strategy.entry.EntryStrategyFactory;
+import com.example.FinTech.simulation.strategy.exit.ExitStrategy;
+import com.example.FinTech.simulation.strategy.exit.ExitStrategyFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

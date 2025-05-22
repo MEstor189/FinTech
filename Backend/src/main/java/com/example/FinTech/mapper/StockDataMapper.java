@@ -3,8 +3,8 @@ package com.example.FinTech.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.FinTech.alpaca.entity.StockData;
-import com.example.FinTech.dto.stockDataDto.StockDataDTO;
+import com.example.FinTech.dto.stock.StockDataDTO;
+import com.example.FinTech.persistence.entity.StockData;
 
 public class StockDataMapper {
         public static List<StockDataDTO> toDtoList(List<StockData> stockDataList) {
