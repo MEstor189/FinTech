@@ -10,6 +10,8 @@ import com.example.FinTech.persistence.entity.ExitStrategyTypeEntity;
 @Repository
 public interface ExitStrategyTypeRepository extends JpaRepository<ExitStrategyTypeEntity, Long> {
 
-    Optional<ExitStrategyTypeEntity> findByName(String name);  
+    Optional<ExitStrategyTypeEntity> findByName(String name);
+
+    ExitStrategyTypeEntity save(ExitStrategyTypeEntity exitStrategyTypeEntity);  
 }
 

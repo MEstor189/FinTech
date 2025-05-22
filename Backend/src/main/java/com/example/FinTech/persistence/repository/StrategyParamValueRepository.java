@@ -11,5 +11,7 @@ import com.example.FinTech.persistence.entity.StrategyParamValue;
 public interface StrategyParamValueRepository extends JpaRepository <StrategyParamValue, Long> {
 
     List<StrategyParamValue> findByConfigId(Long configId);
+
+    
     
 }

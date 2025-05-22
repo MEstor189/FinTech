@@ -2,6 +2,11 @@ package com.example.FinTech.simulation.model;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Trade {
     private String symbol;
     private double entryPrice;
@@ -22,36 +27,6 @@ public class Trade {
         this.strategyName = strategyName;
     }
 
-    // Getter
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public double getEntryPrice() {
-        return entryPrice;
-    }
-
-    public double getExitPrice() {
-        return exitPrice;
-    }
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public LocalDate getEntryDate() {
-        return entryDate;
-    }
-
-    public LocalDate getExitDate() {
-        return exitDate;
-    }
-
-    public String getStrategyName() {
-        return strategyName;
-    }
-
-    // Hilfsmethoden
     public double getProfitAbsolute() {
         return (exitPrice - entryPrice) * quantity;
     }

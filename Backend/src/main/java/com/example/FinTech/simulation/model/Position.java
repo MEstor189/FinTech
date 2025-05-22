@@ -3,6 +3,11 @@ package com.example.FinTech.simulation.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Position {
     private String symbol;
     private double entryPrice;
@@ -35,32 +40,6 @@ public class Position {
         return Optional.of(maxPriceSinceEntry);
     }
 
-    // Getter & Setter
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public double getEntryPrice() {
-        return entryPrice;
-    }
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public LocalDate getEntryDate() {
-        return entryDate;
-    }
-
-    public String getStrategyName() {
-        return strategyName;
-    }
-
-    public String getPositionId() {
-        return positionId;
-    }
-
-    // Optional: Hilfsmethoden
     public double getTotalInvested() {
         return entryPrice * quantity;
     }

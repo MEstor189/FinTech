@@ -4,24 +4,22 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class StockDataId implements Serializable {
 
     private String symbol;
     private LocalDate tradeDate;
 
-    // Standard-Konstruktor
     public StockDataId() {}
 
     public StockDataId(String symbol, LocalDate tradeDate) {
         this.symbol = symbol;
         this.tradeDate = tradeDate;
     }
-
-    public String getSymbol() { return symbol; }
-    public void setSymbol(String symbol) { this.symbol = symbol; }
-
-    public LocalDate getTradeDate() { return tradeDate; }
-    public void setTradeDate(LocalDate tradeDate) { this.tradeDate = tradeDate; }
 
     @Override
     public boolean equals(Object o) {

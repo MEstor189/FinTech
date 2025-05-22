@@ -5,8 +5,12 @@ import java.util.Map;
 import com.example.FinTech.simulation.strategy.entry.EntryStrategyType;
 import com.example.FinTech.simulation.strategy.exit.ExitStrategyType;
 
+import lombok.Getter;
+import lombok.Setter;
 
 
+@Getter
+@Setter
 public class SimulationRequestStrategy {
 
     private String strategyName;
@@ -16,20 +20,6 @@ public class SimulationRequestStrategy {
     private Map<String, Double> exitParams;
 
     public SimulationRequestStrategy() {}
-
-    public String getStrategyName() { return strategyName; }
-    public void setStrategyName(String strategyName) { this.strategyName = strategyName; }
-
-    public EntryStrategyType getEntryStrategyType() { return entryStrategyType; }
-    public void setEntryStrategyType(EntryStrategyType entryStrategyType) { this.entryStrategyType = entryStrategyType; }
-
-    public ExitStrategyType getExitStrategyType() { return exitStrategyType; }
-    public void setExitStrategyType(ExitStrategyType exitStrategyType) { this.exitStrategyType = exitStrategyType; }
-
-    public Map<String, Double> getEntryParams() { return entryParams; }
-    public void setEntryParams(Map<String, Double> entryParams) { this.entryParams = entryParams; }
-
-    public Map<String, Double> getExitParams() { return exitParams; }
-    public void setExitParams(Map<String, Double> exitParams) { this.exitParams = exitParams; }
+    
 }
 

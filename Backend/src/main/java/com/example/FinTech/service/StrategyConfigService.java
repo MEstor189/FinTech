@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.FinTech.dto.request.CreateStrategyRequest;
-import com.example.FinTech.dto.response.StrategyConfigRequest;
+import com.example.FinTech.dto.response.strategy.StrategyConfigRequest;
 import com.example.FinTech.exceptions.NotFoundException;
 import com.example.FinTech.mapper.StrategyConfigMapper;
 import com.example.FinTech.persistence.entity.EntryStrategyTypeEntity;

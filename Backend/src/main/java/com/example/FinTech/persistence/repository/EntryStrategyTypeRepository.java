@@ -10,5 +10,7 @@ import com.example.FinTech.persistence.entity.EntryStrategyTypeEntity;
 @Repository
 public interface EntryStrategyTypeRepository extends JpaRepository<EntryStrategyTypeEntity, Long> {
 
-    Optional<EntryStrategyTypeEntity> findByName(String name);  
+    Optional<EntryStrategyTypeEntity> findByName(String name);
+
+    EntryStrategyTypeEntity save(EntryStrategyTypeEntity entryStrategyTypeEntity);  
 }

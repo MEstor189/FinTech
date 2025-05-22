@@ -9,6 +9,9 @@ import com.example.FinTech.persistence.entity.StrategyParamKey;
 
 @Repository
 public interface StrategyParamKeyRepository extends JpaRepository<StrategyParamKey, Long>{
+
     List<StrategyParamKey> findByIsEntryAndStrategyTypeId (boolean isEntry, Long strategyTypeId);
+
+    boolean existsByStrategyTypeIdAndKey(Long strategyTypeId, String key);
     
 }

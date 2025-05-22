@@ -1,10 +1,15 @@
 package com.example.FinTech.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "stock_data")
 @IdClass(StockDataId.class)
@@ -45,28 +50,6 @@ public class StockData {
         this.volume = volume;
     }
 
-    public String getSymbol() { return symbol; }
-    public void setSymbol(String symbol) { this.symbol = symbol; }
-
-    public LocalDate getTradeDate() { return tradeDate; }
-    public void setTradeDate(LocalDate tradeDate) { this.tradeDate = tradeDate; }
-
-    public BigDecimal getOpenPrice() { return openPrice; }
-    public void setOpenPrice(BigDecimal openPrice) { this.openPrice = openPrice; }
-
-    public BigDecimal getClosePrice() { return closePrice; }
-    public void setClosePrice(BigDecimal closePrice) { this.closePrice = closePrice; }
-
-    public BigDecimal getHighPrice() { return highPrice; }
-    public void setHighPrice(BigDecimal highPrice) { this.highPrice = highPrice; }
-
-    public BigDecimal getLowPrice() { return lowPrice; }
-    public void setLowPrice(BigDecimal lowPrice) { this.lowPrice = lowPrice; }
-
-    public Long getVolume() { return volume; }
-    public void setVolume(Long volume) { this.volume = volume; }
-
-    //wichtig für zusammengesetzte Schlüssel!!!!!
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

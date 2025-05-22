@@ -3,6 +3,11 @@ package com.example.FinTech.dto.stock;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class StockDataDTO {
 
     private String symbol;
@@ -25,58 +30,6 @@ public class StockDataDTO {
         this.highPrice=highPrice;
         this.lowPrice=lowPrice;
         this.volumen=volumen;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-    public BigDecimal getClosePrice() {
-        return closePrice;
-    }
-    public void setClosePrice(BigDecimal closePrice) {
-        this.closePrice = closePrice;
-    }
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public BigDecimal getOpenPrice() {
-        return openPrice;
-    }
-
-    public void setOpenPrice(BigDecimal openPrice) {
-        this.openPrice = openPrice;
-    }
-
-    public BigDecimal getHighPrice() {
-        return highPrice;
-    }
-
-    public void setHighPrice(BigDecimal highPrice) {
-        this.highPrice = highPrice;
-    }
-
-    public BigDecimal getLowPrice() {
-        return lowPrice;
-    }
-
-    public void setLowPrice(BigDecimal lowPrice) {
-        this.lowPrice = lowPrice;
-    }
-
-    public Long getVolumen() {
-        return volumen;
-    }
-
-    public void setVolumen(Long volumen) {
-        this.volumen = volumen;
     }
     
 }

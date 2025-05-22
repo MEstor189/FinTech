@@ -2,6 +2,11 @@ package com.example.FinTech.simulation.model;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SimulationResult {
 
     private final List<Trade> trades;
@@ -28,23 +33,6 @@ public class SimulationResult {
                 .mapToLong(Trade::getHoldingDays)
                 .average()
                 .orElse(0.0);
-    }
-
-    // Getter
-    public List<Trade> getTrades() {
-        return trades;
-    }
-
-    public double getTotalProfit() {
-        return totalProfit;
-    }
-
-    public double getAverageHoldingDays() {
-        return averageHoldingDays;
-    }
-
-    public int getTradeCount() {
-        return tradeCount;
     }
 }
 

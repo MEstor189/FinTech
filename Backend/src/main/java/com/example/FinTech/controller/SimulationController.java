@@ -39,29 +39,28 @@ public class SimulationController {
             SimulationResult result = simulationService.runSimulation(sRequestStrategy, request.getSymbol(), request.getStartDate(), request.getEndDate(), request.getInvestmentPerTrade());
             SimulationResponseStrategyData strategy= new SimulationResponseStrategyData(
                 sRequestStrategy.getStrategyName(),
-                result.getTrades(),
-                result.getTotalProfit(),
-                result.getAverageHoldingDays(),
-                result.getTradeCount(),
                 sRequestStrategy.getEntryStrategyType(),
                 sRequestStrategy.getExitStrategyType(),
                 sRequestStrategy.getEntryParams(),
-                sRequestStrategy.getExitParams()
+                sRequestStrategy.getExitParams(),
+                result.getTrades(),
+                result.getTotalProfit(),
+                result.getAverageHoldingDays(),
+                result.getTradeCount()
                 );
             logger.info("Strategy Name: {}",strategy.getStrategyName());
             responseDatas.add(strategy);     
         }
    
         return new SimulationResponse(
-            responseDatas,
+            request.getSymbol(),
             request.getStartDate(),
             request.getEndDate(),
-            request.getSymbol(),
+            responseDatas,
             request.getInvestmentPerTrade(),
             simulationService.getStockDataDtoForSymbol(request.getSymbol(), request.getStartDate(), request.getEndDate())
         );
 
-        
     }
 
 }

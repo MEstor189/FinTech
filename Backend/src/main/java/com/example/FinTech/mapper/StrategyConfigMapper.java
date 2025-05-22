@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.FinTech.dto.response.StrategyConfigRequest;
+import com.example.FinTech.dto.response.strategy.StrategyConfigRequest;
 import com.example.FinTech.persistence.entity.StrategyConfig;
 import com.example.FinTech.persistence.entity.StrategyParamValue;
 
