@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import StrategyCreator from '../components/strategyCreator/StrategyCreator';
 import StrategyList from '../components/strategyList/StrategyList';
-import '../components/StrategyCreator.css';
 import './StrategiesPage.css';
 
 const TEST_STRATEGY = {
   name: 'Test Strategy',
-  entryStrategy: 'Momentum',
-  exitStrategy: 'TargetProfit',
+  entryStrategy: 'MOMENTUM',
+  exitStrategy: 'TARGET_PROFIT',
   entryParameters: { short: 10, long: 30 },
   exitParameters: { threshold: 0.05, multiplier: 2 },
 };
 
 const TEST_STRATEGY_2 = {
   name: 'test3',
-  entryStrategy: 'BuyTheDip',
-  exitStrategy: 'TrailingStop',
+  entryStrategy: 'BUY_THE_DIP',
+  exitStrategy: 'TRAILING_STOP',
   entryParameters: { short: 5, long: 15 },
   exitParameters: { threshold: 0.02, multiplier: 1.5 },
 };
