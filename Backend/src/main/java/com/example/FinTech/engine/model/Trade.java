@@ -63,4 +63,5 @@ public class Trade {
     public long getHoldingDays() {
         return java.time.temporal.ChronoUnit.DAYS.between(entryDate, exitDate);
     }
+
 }

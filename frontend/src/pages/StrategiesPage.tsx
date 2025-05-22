@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import StrategyCreator from '../components/StrategyCreator';
-import StrategyList from '../components/StrategyList';
+import StrategyCreator from '../components/strategyCreator/StrategyCreator';
+import StrategyList from '../components/strategyList/StrategyList';
 import '../components/StrategyCreator.css';
+import './StrategiesPage.css';
 
 const TEST_STRATEGY = {
   name: 'Test Strategy',

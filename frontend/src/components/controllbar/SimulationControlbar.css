@@ -36,7 +36,7 @@
   }
   
   .sim-ctrl-btn {
-    background: #d72660 !important;
+    background: #a259ff !important;
     color: white !important;
     font-weight: 600 !important;
     min-width: 180px !important;
@@ -48,5 +48,5 @@
   }
   
   .sim-ctrl-btn:hover {
-    background: #b81e4b !important;
+    background: #7717f5 !important;
   }

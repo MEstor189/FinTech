@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import SimulationControlBar from '../components/controllbar/SimulationControlBar';
 import ChartSwitcher, { ChartType } from '../components/charts/ChartSwitcher';
-import EquityCurveChart from '../components/charts/EquityCurveChart';
 import PriceChart from '../components/charts/PriceChart';
 import StrategyCompareChart from '../components/charts/StrategyCompareChart';
 import PerformanceChart from '../components/charts/PerformanceChart';

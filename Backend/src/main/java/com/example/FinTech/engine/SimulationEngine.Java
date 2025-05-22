@@ -45,6 +45,7 @@ public class SimulationEngine {
         }
 
         logger.info("Simulation finished. Total trades executed: {}", tradeHistory.size());
+
         return new SimulationResult(tradeHistory);
     }
 

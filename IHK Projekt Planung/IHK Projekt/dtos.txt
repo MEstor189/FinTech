@@ -2,37 +2,40 @@
 🧩 1. Kursverlauf (PriceChart)
 priceSeries: PricePoint[]
 
-Zeitreihe mit Tageskursen (date, close)
+Zeitreihe mit Tageskursen (date, close)  done
 
-trades: Trade[]
+trades: Trade[]		done
 
-Liste der abgeschlossenen Trades mit Datum, Preis, Typ (BUY/SELL)
+Liste der abgeschlossenen Trades mit Datum, Preis, Typ (BUY/SELL)  done
 
-movingAverages?: { short: MA[], long: MA[] }
 
-Optional: gleitende Durchschnitte (MA5, MA20 etc.) über dieselbe Zeitreihe
 
 📊 2. PerformanceChart (prozentuale Performance)
 strategies: StrategyPerformance[]
 
 Für jede Strategie:
 
-name: Strategiebezeichnung
+name: Strategiebezeichnung  done
 
-data: { date, performance }[]: Kumulierte %-Veränderung auf Basis abgeschlossener Trades
+data: { date, performance }[]: Kumulierte %-Veränderung auf Basis abgeschlossener Trades   done
 
 📋 3. StrategyCompareChart (Metrik-Vergleich)
 strategies: StrategyMetrics[]
 
 Für jede Strategie:
 
-totalProfit: Gesamtrendite (z. B. +12.4 %)
+totalProfit: Gesamtrendite (z. B. +12.4 %) done (muss in %)
 
-averageHoldingDays: Ø Haltezeit je Trade
+averageHoldingDays: Ø Haltezeit je Trade  done
 
-tradeCount: Anzahl der Trades
+tradeCount: Anzahl der Trades done
 
 winRate: Trefferquote in %
 
-maxDrawdown: Größter relativer Verlust in %
+maxDrawdown: Größter relativer Verlust in %    
 
+
+optional:
+ movingAverages?: { short: MA[], long: MA[] }
+
+Optional: gleitende Durchschnitte (MA5, MA20 etc.) über dieselbe Zeitreihe

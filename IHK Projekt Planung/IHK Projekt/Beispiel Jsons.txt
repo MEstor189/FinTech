@@ -1,0 +1,148 @@
+Beispiel Request:
+{
+  "symbol": "AAPL",
+  "startDate": "2023-07-01",
+  "endDate": "2025-05-01",
+  "investmentPerTrade": 100.0,
+  "requestStrategies": [
+    {
+      "strategyName": "BuyTheDip",
+      "entryStrategyType": "BUY_THE_DIP",
+      "exitStrategyType": "TARGET_PROFIT",
+      "entryParams": {
+        "dipThreshold": 2.0
+      },
+      "exitParams": {
+        "profitTarget": 2.5
+      }
+    },
+    {
+      "strategyName": "MovingAverage",
+      "entryStrategyType": "MOVING_AVERAGE",
+      "exitStrategyType": "MOVING_AVERAGE_CROSS",
+      "entryParams": {
+        "shortPeriod": 3,
+        "longPeriod": 5
+      },
+      "exitParams": {
+        "shortPeriod": 3,
+        "longPeriod": 10
+      }
+    }
+  ]
+}
+Beispiel Response:
+
+{
+  "symbol": "AAPL",
+  "startDate": "2025-03-01",
+  "endDate": "2025-05-01",
+  "investmentPerTrade": 100,
+  "strategies": [
+    {
+      "strategyName": "BuyTheDip",
+      "entryStrategyType": "BUY_THE_DIP",
+      "exitStrategyType": "TARGET_PROFIT",
+      "entryParams": {
+        "dipThreshold": 2
+      },
+      "exitParams": {
+        "profitTarget": 2.5
+      },
+      "tradeCount": 8,
+      "totalProfit": 28.490802162578127,
+      "averageHoldingDays": 4.75,
+      "trades": [
+        {
+          "symbol": "AAPL",
+          "entryPrice": 220.84,
+          "exitPrice": 215.24,
+          "quantity": 0.4528165187466039,
+          "entryDate": "2025-03-11",
+          "exitDate": "2025-03-19",
+          "strategyName": "BuyTheDipEntry",
+          "profitAbsolute": -2.5357725049809794,
+          "holdingDays": 8,
+          "profitPercent": -2.535772504980979
+        },
+        {
+          "symbol": "AAPL",
+          "entryPrice": 209.68,
+          "exitPrice": 215.24,
+          "quantity": 0.47691720717283476,
+          "entryDate": "2025-03-13",
+          "exitDate": "2025-03-19",
+          "strategyName": "BuyTheDipEntry",
+          "profitAbsolute": 2.6516596718809624,
+          "holdingDays": 6,
+          "profitPercent": 2.651659671880963
+        },
+	.....
+      ]
+    },
+    {
+      "strategyName": "MovingAverage",
+      "entryStrategyType": "MOVING_AVERAGE",
+      "exitStrategyType": "MOVING_AVERAGE_CROSS",
+      "entryParams": {
+        "shortPeriod": 3,
+        "longPeriod": 5
+      },
+      "exitParams": {
+        "shortPeriod": 3,
+        "longPeriod": 10
+      },
+      "tradeCount": 4,
+      "totalProfit": 2.5758160100497633,
+      "averageHoldingDays": 11.5,
+      "trades": [
+        {
+          "symbol": "AAPL",
+          "entryPrice": 212.69,
+          "exitPrice": 203.19,
+          "quantity": 0.47016784992242233,
+          "entryDate": "2025-03-18",
+          "exitDate": "2025-04-03",
+          "strategyName": "MovingAverageEntry",
+          "profitAbsolute": -4.466594574263012,
+          "holdingDays": 16,
+          "profitPercent": -4.466594574263012
+        },
+        {
+          "symbol": "AAPL",
+          "entryPrice": 223.89,
+          "exitPrice": 203.19,
+          "quantity": 0.4466479074545536,
+          "entryDate": "2025-04-02",
+          "exitDate": "2025-04-03",
+          "strategyName": "MovingAverageEntry",
+          "profitAbsolute": -9.245611684309255,
+          "holdingDays": 1,
+          "profitPercent": -9.245611684309255
+        },
+	.....
+      ]
+    }
+  ],
+  "stockData": [
+    {
+      "symbol": "AAPL",
+      "date": "2025-03-03",
+      "openPrice": 241.79,
+      "closePrice": 238.03,
+      "highPrice": 244.0272,
+      "lowPrice": 236.112,
+      "volumen": 47183985
+    },
+    {
+      "symbol": "AAPL",
+      "date": "2025-03-04",
+      "openPrice": 237.705,
+      "closePrice": 235.93,
+      "highPrice": 240.07,
+      "lowPrice": 234.68,
+      "volumen": 53798062
+    },
+	......
+  ]
+}
