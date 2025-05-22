@@ -32,19 +32,19 @@ public class StrategyConfig {
     public void setId(Long id) {
         this.id = id;
     }
-    public EntryStrategyType getEntryStrategy() {
+    public EntryStrategyTypeEntity getEntryStrategy() {
         return entryStrategy;
     }
 
-    public void setEntryStrategy(EntryStrategyType entryStrategy) {
+    public void setEntryStrategy(EntryStrategyTypeEntity entryStrategy) {
         this.entryStrategy = entryStrategy;
     }
 
-    public ExitStrategyType getExitStrategy() {
+    public ExitStrategyTypeEntity getExitStrategy() {
         return exitStrategy;
     }
 
-    public void setExitStrategy(ExitStrategyType exitStrategy) {
+    public void setExitStrategy(ExitStrategyTypeEntity exitStrategy) {
         this.exitStrategy = exitStrategy;
     }
 
@@ -74,11 +74,11 @@ public class StrategyConfig {
 
     @ManyToOne
     @JoinColumn(name = "entry_strategy_id")
-    private EntryStrategyType entryStrategy;
+    private EntryStrategyTypeEntity entryStrategy;
 
     @ManyToOne
     @JoinColumn(name = "exit_strategy_id")
-    private ExitStrategyType exitStrategy;
+    private ExitStrategyTypeEntity exitStrategy;
 
     private String name;
 
