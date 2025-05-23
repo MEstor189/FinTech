@@ -1,15 +1,16 @@
 import React from "react";
 import {
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  ReferenceLine
 } from "recharts";
-import './StrategyCompareChart.css';
+import { calculateMaxDrawdown } from "../../utils/metrics";
 
 type StrategyMetrics = {
   name: string;
   totalProfit: number;
   averageHoldingDays: number;
   tradeCount: number;
-  winRate: number;
+  profitPerTrade: number;
   maxDrawdown: number;
 };
 
@@ -20,41 +21,53 @@ interface StrategyCompareChartProps {
 
 const metricsKeys = [
   { key: "totalProfit", label: "Profit" },
-  { key: "averageHoldingDays", label: "Avg. Hold" },
+  { key: "profitPerTrade", label: "Profit/ Trade" },
   { key: "tradeCount", label: "Trades" },
-  { key: "winRate", label: "Win %" },
+  { key: "averageHoldingDays", label: "Avg. Hold" },
   { key: "maxDrawdown", label: "Drawdown" }
 ];
 
-const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies, height = 400 }) => {
-  const radarData = metricsKeys.map(({ key, label }) => {
-    const entry: any = { metric: label };
-    strategies.forEach((s) => {
-      entry[s.name] = s[key as keyof StrategyMetrics];
-    });
-    return entry;
-  });
+const colors = ["#5a6aff", "#ff4fd8"];
 
-  const colors = ["#5a6aff", "#ff4fd8"];
+const StrategyCompareChart: React.FC<StrategyCompareChartProps> = ({ strategies, height = 400 }) => {
+  const barData = metricsKeys.map(({ key, label }) => ({
+    metric: label,
+    ...Object.fromEntries(
+      strategies.map((s) => [s.name, s[key as keyof StrategyMetrics]])
+    )
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <RadarChart outerRadius={150} data={radarData}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="metric" />
-        <PolarRadiusAxis />
+      <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3c" />
+        <XAxis
+          dataKey="metric"
+          tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
+        />
+        <YAxis
+          tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
+        />
+        <ReferenceLine y={0} stroke="#888" strokeDasharray="3 3" />
+        <Tooltip
+          formatter={(value: number, name: string) => [value.toFixed(2), name]}
+          cursor={{ fill: 'transparent' }}
+        />
+        <Legend />
         {strategies.map((s, idx) => (
-          <Radar
+          <Bar
             key={s.name}
-            name={s.name}
             dataKey={s.name}
-            stroke={colors[idx % colors.length]}
             fill={colors[idx % colors.length]}
-            fillOpacity={0.4}
+            radius={[4, 4, 0, 0]}
+            activeBar={{
+              fill: colors[idx % colors.length],
+              stroke: '#fff',
+              strokeWidth: 1
+            }}
           />
         ))}
-        <Legend />
-      </RadarChart>
+      </BarChart>
     </ResponsiveContainer>
   );
 };

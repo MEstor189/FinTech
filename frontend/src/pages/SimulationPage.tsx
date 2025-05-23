@@ -10,6 +10,7 @@ import { SimulationRequest, Trade, SimulationResponse } from '../types/simulatio
 import { fetchSimulation } from '../services/simulation';
 import './SimulationPage.css';
 import { useAvailableStrategies } from '../hooks/useAvailableStrategies';
+import { calculateMaxDrawdown } from '../utils/metrics';
 
 
 
@@ -27,6 +28,15 @@ export default function SimulationPage() {
     error: strategiesError,
     refetch: refetchStrategies,
   } = useAvailableStrategies();
+
+  type StrategyMetrics = {
+    name: string;
+    totalProfit: number;
+    averageHoldingDays: number;
+    tradeCount: number;
+    profitPerTrade: number;
+    maxDrawdown: number;
+  };
 
   type MarkerPoint = {
     date: string;
@@ -85,6 +95,7 @@ export default function SimulationPage() {
     };
   };
 
+
   const request = simulationStarted ? buildRequest() : null;
   const [data, refetch] = useSimulationData(request);
 
@@ -126,6 +137,19 @@ export default function SimulationPage() {
   const tradesB = strategyB ? getTrades(strategyB) : [];
   const markerA = tradesA.length ? mapTradesToMarkers(tradesA) : [];
   const markerB = tradesB.length ? mapTradesToMarkers(tradesB) : [];
+
+  const metrics: StrategyMetrics[] = strategies.map((s) => {
+    const profitPerTrade = s.tradeCount > 0 ? s.totalProfit / s.tradeCount : 0;
+
+    return {
+      name: s.strategyName,
+      totalProfit: s.totalProfit,
+      averageHoldingDays: s.averageHoldingDays,
+      tradeCount: s.tradeCount,
+      profitPerTrade,
+      maxDrawdown: calculateMaxDrawdown(performanceCurves[s.strategyName] || [])
+    };
+  });
   console.log("Loaded strategies:", availableStrategies);
 
   return (
@@ -191,14 +215,7 @@ export default function SimulationPage() {
                 {selectedChart === 'compare' && (
                   <div className="chart-container">
                     <StrategyCompareChart
-                      strategies={strategies.map((s) => ({
-                        name: s.strategyName,
-                        totalProfit: s.totalProfit,
-                        averageHoldingDays: s.averageHoldingDays,
-                        tradeCount: s.tradeCount,
-                        winRate: 0, // TODO: berechnen
-                        maxDrawdown: 0, // TODO: berechnen
-                      }))}
+                      strategies={metrics}
                       height={600}
                     />
                   </div>
