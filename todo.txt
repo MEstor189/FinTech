@@ -1,12 +1,8 @@
-strategien in db speichern
+testing
 
-strategien von db an Frontend
+error handling
 
-charts schöner machen
+gewährleisten das man nur richtige werte abschicken kann bei strategien erstellen 
 
-stockdata für andere symbols
+zeitraum für simulation kontrollieren
 
-
-
-
-(docker?)
