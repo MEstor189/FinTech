@@ -4,7 +4,6 @@
   padding: 20px;
   background-color: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .performance-chart-container .recharts-default-tooltip {
@@ -12,24 +11,11 @@
   border: 1px solid var(--border-color) !important;
   border-radius: 4px;
   padding: 10px;
+
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
 }
 
-.performance-chart-container .recharts-tooltip-label {
-  color: var(--text-color) !important;
-}
 
-.performance-chart-container .recharts-tooltip-item {
-  color: var(--text-color) !important;
-}
-
-.performance-chart-container .recharts-legend-item-text {
-  color: var(--text-color) !important;
-}
-
-.performance-chart-container .recharts-cartesian-axis-tick-value {
-  fill: var(--text-color) !important;
-}
-
-.performance-chart-container .recharts-cartesian-axis-label {
-  fill: var(--text-color) !important;
-} 

@@ -1,6 +1,7 @@
 import React from "react";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  ReferenceLine
 } from "recharts";
 import './PerformanceChart.css';
 
@@ -22,7 +23,7 @@ interface PerformanceChartProps {
 const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00c49f"];
 
 const PerformanceChart: React.FC<PerformanceChartProps> = ({ strategies, height = 400 }) => {
-  const mergedData: { date: string; [strategyName: string]: number | string }[] =
+  const mergedData: { date: string;[strategyName: string]: number | string }[] =
     strategies[0]?.data.map((_, idx) => {
       const date = strategies[0].data[idx].date;
       const point: any = { date };
@@ -36,34 +37,29 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({ strategies, height 
     <div className="performance-chart-container" style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={mergedData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-          <XAxis 
-            dataKey="date" 
-            stroke="var(--text-color)"
-            tick={{ fill: 'var(--text-color)' }}
+          <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+          <XAxis
+            dataKey="date"
+            stroke="#444"
+            tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
           />
           <YAxis
             tickFormatter={(val) => `${val}%`}
             domain={["auto", "auto"]}
-            label={{ 
-              value: "Performance (%)", 
-              angle: -90, 
+            label={{
+              value: "Performance (%)",
+              angle: -90,
               position: "insideLeft",
-              fill: 'var(--text-color)'
+              fill: '#a259ff'
             }}
-            stroke="var(--text-color)"
-            tick={{ fill: 'var(--text-color)' }}
+            stroke="#444"
+            tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
           />
-          <Tooltip 
+          <Tooltip
             formatter={(value: number) => [`${value.toFixed(2)}%`, 'Performance']}
-            contentStyle={{
-              backgroundColor: 'var(--background-color)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '4px',
-              color: 'var(--text-color)'
-            }}
           />
           <Legend />
+          <ReferenceLine y={0} stroke="#888" strokeDasharray="3 3" />
           {strategies.map((s, idx) => (
             <Line
               key={s.name}
@@ -73,6 +69,14 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({ strategies, height 
               dot={false}
               name={s.name}
               strokeWidth={2}
+
+              label={{
+                position: "right",
+                fill: colors[idx % colors.length],
+                formatter: (val: number) => `${val.toFixed(1)}%`,
+                fontSize: 12,
+                fontWeight: 600
+              }}
             />
           ))}
         </LineChart>

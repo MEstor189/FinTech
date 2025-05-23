@@ -20,7 +20,7 @@ export default function SimulationPage() {
   const [timeframe, setTimeframe] = useState('01.01.2024-01.04.2024');
   const [symbol, setSymbol] = useState('AAPL');
   const [simulationStarted, setSimulationStarted] = useState(false);
-  const [selectedChart, setSelectedChart] = useState<ChartType>('equity');
+  const [selectedChart, setSelectedChart] = useState<ChartType>('price');
   const {
     strategies: availableStrategies,
     isLoading: loadingStrategies,
@@ -176,7 +176,7 @@ export default function SimulationPage() {
                     </div>
                   </>
                 )}
-                {selectedChart === 'equity' && (
+                {selectedChart === 'performance' && (
                   <>
                     <div className="chart-container">
                       <Typography variant="h4" align="center" className="chart-title-blue">{strategyA}</Typography>

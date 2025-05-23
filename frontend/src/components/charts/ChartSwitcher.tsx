@@ -1,7 +1,7 @@
 import React from "react";
 import "./ChartSwitcher.css";
 
-export type ChartType = "price" | "equity" | "compare";
+export type ChartType = "price" | "performance" | "compare";
 
 interface ChartSwitcherProps {
   selectedChart: ChartType;
@@ -11,7 +11,7 @@ interface ChartSwitcherProps {
 const ChartSwitcher: React.FC<ChartSwitcherProps> = ({ selectedChart, onChange }) => {
   const buttons: { label: string; type: ChartType }[] = [
     { label: "Kursverlauf", type: "price" },
-    { label: "Equity-Kurve", type: "equity" },
+    { label: "Performance-Kurve", type: "performance" },
     { label: "Strategie-Vergleich", type: "compare" },
   ];
 
