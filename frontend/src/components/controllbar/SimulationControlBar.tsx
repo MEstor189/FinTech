@@ -32,7 +32,7 @@ export default function SimulationControlBar({
       <FormControl className="sim-ctrl-select">
         <InputLabel className="sim-ctrl-label">Strategie A</InputLabel>
         <Select
-          value={strategyA}
+          value={strategyA || ''}
           onChange={e => onStrategyAChange(e.target.value)}
           label="Strategie A"
           className="sim-ctrl-select-input"
@@ -45,7 +45,7 @@ export default function SimulationControlBar({
       <FormControl className="sim-ctrl-select">
         <InputLabel className="sim-ctrl-label">Strategie B</InputLabel>
         <Select
-          value={strategyB}
+          value={strategyB || ''}
           onChange={e => onStrategyBChange(e.target.value)}
           label="Strategie B"
           className="sim-ctrl-select-input"

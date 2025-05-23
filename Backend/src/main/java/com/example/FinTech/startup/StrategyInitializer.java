@@ -39,7 +39,7 @@ public void run(String... args) {
     saveIfNotExists(exitRepo, "MOVING_AVERAGE_CROSS");
     saveIfNotExists(exitRepo, "TRAILING_STOP");
 
-    saveParamIfNotExists(true, "BUY_THE_DIP", "dipThreshold", "double");
+    
     saveParamIfNotExists(true, "MOMENTUM", "momentumDays", "int");
     saveParamIfNotExists(true, "MOVING_AVERAGE", "shortPeriod", "int");
     saveParamIfNotExists(true, "MOVING_AVERAGE", "longPeriod", "int");

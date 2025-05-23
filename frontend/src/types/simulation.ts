@@ -4,7 +4,13 @@ export interface SimulationRequest {
   startDate: string;
   endDate: string;
   investmentPerTrade: number;
-  requestStrategies: StrategyRequest[];
+  requestStrategies: {
+    strategyName: string;
+    entryStrategyType: string;
+    exitStrategyType: string;
+    entryParams: Record<string, number>;
+    exitParams: Record<string, number>;
+  }[];
 }
 
 export interface StrategyRequest {

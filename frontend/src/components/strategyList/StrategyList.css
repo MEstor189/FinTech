@@ -8,8 +8,8 @@
     margin-bottom: 20px;
     color: #a259ff;
     text-align: center;
-    font-weight: 700;
-    font-size: 2rem;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
   }
   
   .strategy-list-empty {

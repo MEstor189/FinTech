@@ -15,18 +15,21 @@
   }
 }
 
-.strategy-card {
-  background: #181925;
-  border-radius: 16px;
-  padding: 32px;
-/*   box-shadow: 0 2px 16px #0002; */
-  color: #fff;
+.strategy-card .MuiInputLabel-root{
+  color: #a259ff !important;
+}
+
+.strategy-card .MuiTypography-subtitle1 {
+  color: #a259ff !important;
 }
 
 .strategy-title {
+  display: flex;
   color: #a259ff;
   font-weight: 600;
+  font-size: 2.0rem !important;
   margin-bottom: 8px;
+  justify-content: center !important;
 }
 
 .strategy-subtitle {
@@ -121,7 +124,7 @@ input::placeholder, .MuiInputBase-input::placeholder {
   color: #23243a !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
-  
+  flex: 1 !important;
 }
 
 .save-btn:hover {
@@ -129,41 +132,34 @@ input::placeholder, .MuiInputBase-input::placeholder {
 }
 
 .cancel-btn {
-
   background: #a01f2e !important;
   color: #23243a !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
+  flex: 1 !important;
 }
 
 .cancel-btn:hover {
-  background: #d72660;
-
+  background: #d72660 !important;
 }
 
-/* Entferne Pfeile bei number inputs (Chrome, Safari, Edge) */
+
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Entferne Pfeile bei number inputs (Firefox) */
+
 input[type=number] {
   -moz-appearance: textfield;
 }
 
-/* Hide vertical scrollbar globally */
-/* body, html {
-  overflow-y: hidden !important;
-} */
 
-/* Hide scrollbar for all elements (Webkit browsers) */
 *::-webkit-scrollbar {
   display: none !important;
 }
 
-/* Hide scrollbar for Firefox */
 * {
   scrollbar-width: none !important;
 } 

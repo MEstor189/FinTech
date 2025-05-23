@@ -14,23 +14,24 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StrategyConfigRequest {
     private Long id;
-    private String name;
+    private String strategyName;
 
     private String entryStrategyName;
     private String exitStrategyName;
 
     private LocalDateTime createdAt;
 
-    private List<ParamValueDTO> paramValues;
-
+    private List<ParamValueDTO> entryParams;
+    private List<ParamValueDTO> exitParams;
 
     @Getter
     @Setter
     @NoArgsConstructor
-@AllArgsConstructor
+    @AllArgsConstructor
     public static class ParamValueDTO {
         private String key;
         private String type;
         private String value;
+        private String inputType;
     }
 }

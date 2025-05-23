@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -8,223 +8,234 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@mui/material';
-import './StrategyCreator.css';
-import React from "react";
+  CircularProgress,
+} from "@mui/material";
+import { useStrategyTypes } from "../../hooks/useStrategyTypes";
+import { useCreateStrategy } from "../../hooks/useCreateStrategy";
+import { StrategyTypeWithParams, ParamKey, StrategyConfigRequest } from "../../types/strategies";
+import "./StrategyCreator.css";
+import { updateStrategy } from "../../hooks/useStrategyAction";
 
 interface StrategyCreatorProps {
-  onStrategyCreate: (strategy: any) => void;
-  editStrategy?: any;
+  onCreated: () => void;
+  editStrategy?: StrategyConfigRequest | null;
   isEditing?: boolean;
-  onCancelEdit?: () => void;
+  onCancel?: () => void;
 }
 
-const getStrategyParameters = (strategy: string) => {
-  switch (strategy) {
-    case 'BuyTheDip':
-      return { placeholder: 14, placeholder2: 0.02 };
-    case 'MovingAverage':
-      return { placeholder: 20, placeholder2: 0.05 };
-    case 'Momentum':
-      return { placeholder: 10, placeholder2: 0.03 };
-    case 'TrailingStop':
-      return { placeholder: 15, placeholder2: 0.04 };
-    case 'TargetProfit':
-      return { placeholder: 25, placeholder2: 0.06 };
-    default:
-      return {};
+export default function StrategyCreator({ onCreated, editStrategy, isEditing, onCancel }: StrategyCreatorProps) {
+  const { data, isLoading: loadingTypes } = useStrategyTypes();
+  const { create, isLoading: isSubmitting, error, success } = useCreateStrategy();
+
+  const [strategyName, setStrategyName] = useState(editStrategy?.strategyName || "");
+  const [selectedEntry, setSelectedEntry] = useState<StrategyTypeWithParams | null>(null);
+  const [selectedExit, setSelectedExit] = useState<StrategyTypeWithParams | null>(null);
+  const [entryParams, setEntryParams] = useState<Record<string, string>>({});
+  const [exitParams, setExitParams] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (editStrategy && data) {
+      setStrategyName(editStrategy.strategyName);
+      
+      const entryType = data.entryStrategies.find(s => s.name === editStrategy.entryStrategyName);
+      const exitType = data.exitStrategies.find(s => s.name === editStrategy.exitStrategyName);
+      
+      if (entryType) {
+        setSelectedEntry(entryType);
+        const entryParamsMap: Record<string, string> = {};
+        editStrategy.entryParams.forEach(p => {
+          entryParamsMap[p.key] = p.value;
+        });
+        setEntryParams(entryParamsMap);
+      }
+      
+      if (exitType) {
+        setSelectedExit(exitType);
+        const exitParamsMap: Record<string, string> = {};
+        editStrategy.exitParams.forEach(p => {
+          exitParamsMap[p.key] = p.value;
+        });
+        setExitParams(exitParamsMap);
+      }
+    }
+  }, [editStrategy, data]);
+
+  const handleParamChange = (
+    type: "entry" | "exit",
+    key: string,
+    value: string
+  ) => {
+    if (type === "entry") {
+      setEntryParams({ ...entryParams, [key]: value });
+    } else {
+      setExitParams({ ...exitParams, [key]: value });
+    }
+  };
+
+  const buildParamValues = (params: ParamKey[], values: Record<string, string>) => {
+    return params.map((param) => ({
+      paramKeyId: param.id,
+      value: values[param.key],
+    }));
+  };
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!selectedEntry || !selectedExit) return;
+
+  const request = {
+    name: strategyName,
+    entryStrategyTypeId: selectedEntry.id,
+    exitStrategyTypeId: selectedExit.id,
+    paramValues: [
+      ...buildParamValues(selectedEntry.params, entryParams),
+      ...buildParamValues(selectedExit.params, exitParams),
+    ],
+  };
+
+  try {
+    if (isEditing && editStrategy?.id) {
+      await updateStrategy(editStrategy.id, request); 
+    } else {
+      await create(request);
+    }
+
+    if (onCreated) onCreated();
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
   }
 };
 
-export default function StrategyCreator({ onStrategyCreate, editStrategy, isEditing, onCancelEdit }: StrategyCreatorProps) {
-  const [strategyName, setStrategyName] = useState('');
-  const [entryStrategy, setEntryStrategy] = useState('');
-  const [exitStrategy, setExitStrategy] = useState('');
-  const [entryParameters, setEntryParameters] = useState<any>({});
-  const [exitParameters, setExitParameters] = useState<any>({});
-
-  // Prefill fields when editing
-  useEffect(() => {
-    if (isEditing && editStrategy) {
-      setStrategyName(editStrategy.name || '');
-      setEntryStrategy(editStrategy.entryStrategy || '');
-      setExitStrategy(editStrategy.exitStrategy || '');
-      setEntryParameters(editStrategy.entryParameters || {});
-      setExitParameters(editStrategy.exitParameters || {});
-    } else {
-      setStrategyName('');
-      setEntryStrategy('');
-      setExitStrategy('');
-      setEntryParameters({});
-      setExitParameters({});
-    }
-  }, [isEditing, editStrategy]);
-
-  useEffect(() => {
-    setEntryParameters(getStrategyParameters(entryStrategy));
-  }, [entryStrategy]);
-
-  useEffect(() => {
-    setExitParameters(getStrategyParameters(exitStrategy));
-  }, [exitStrategy]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onStrategyCreate({
-      name: strategyName,
-      entryStrategy,
-      exitStrategy,
-      entryParameters,
-      exitParameters,
-    });
-  };
+  if (loadingTypes) return <div>Lade Strategietypen...</div>;
 
   return (
     <div className="strategy-card">
       <form className="grid-container" onSubmit={handleSubmit}>
-        {/* 1st row: Name */}
-        <div style={{ marginBottom: 0 }}>
-          <Typography className="strategy-title" variant="subtitle1" sx={{ mb: 1 }}>
-            Strategy Name
-          </Typography>
-          <TextField
-            fullWidth
-            placeholder="Enter strategy name..."
-            value={strategyName}
-            onChange={(e) => setStrategyName(e.target.value)}
-            required
-          />
-        </div>
-        {/* 2nd row: Entry/Exit selection side by side */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
-          <div style={{ flex: 1 }}>
-            <Typography className="strategy-subtitle" variant="subtitle2" sx={{ mb: 1 }}>
-              Entry Strategy
-            </Typography>
-            <FormControl fullWidth required className="input-label-lila">
-              <Select
-                displayEmpty
-                value={entryStrategy}
-                onChange={(e) => setEntryStrategy(e.target.value)}
-                renderValue={selected => selected ? selected : 'Select entry strategy...'}
-              >
-                <MenuItem value="" disabled>Select entry strategy...</MenuItem>
-                <MenuItem value="BuyTheDip">BuyTheDip</MenuItem>
-                <MenuItem value="MovingAverage">MovingAverage</MenuItem>
-                <MenuItem value="Momentum">Momentum</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div style={{ flex: 1 }}>
-            <Typography className="strategy-subtitle" variant="subtitle2" sx={{ mb: 1 }}>
-              Exit Strategy
-            </Typography>
-            <FormControl fullWidth required className="input-label-lila">
-              <Select
-                displayEmpty
-                value={exitStrategy}
-                onChange={(e) => setExitStrategy(e.target.value)}
-                renderValue={selected => selected ? selected : 'Select exit strategy...'}
-              >
-                <MenuItem value="" disabled>Select exit strategy...</MenuItem>
-                <MenuItem value="Moving Average">Moving Average</MenuItem>
-                <MenuItem value="TrailingStop">TrailingStop</MenuItem>
-                <MenuItem value="TargetProfit">TargetProfit</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
-        {/* 3rd row: Entry parameters side by side, max. 4 fields */}
-        <div style={{ marginTop: 8 }}>
-          <Typography className="strategy-subtitle" variant="subtitle1" sx={{ mb: 1 }}>
-            Entry Parameters
-          </Typography>
-          <div style={{ display: 'flex', gap: 16, minHeight: 80 }}>
-            {[0,1,2,3].map((i) => {
-              const entryKeys = Object.keys(entryParameters);
-              const key = entryKeys[i];
-              // Placeholder names for parameters
-              const paramNames = ['ShortPeriod', 'LongPeriod', 'Threshold', 'Multiplier'];
-              return key ? (
-                <div key={key} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <Typography className="strategy-subtitle" variant="caption" sx={{ mb: 0 }}>
-                    {paramNames[i]}
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    value={entryParameters[key]}
-                    placeholder={`Will be changed later: ${key}`}
-                    onChange={(e) => setEntryParameters({
-                      ...entryParameters,
-                      [key]: Number(e.target.value),
-                    })}
-                  />
-                </div>
-              ) : (
-                <div key={i} style={{ flex: 1 }} />
-              );
-            })}
-          </div>
-        </div>
-        {/* 4th row: Exit parameters side by side, max. 4 fields */}
-        <div style={{ marginTop: 8 }}>
-          <Typography className="strategy-subtitle" variant="subtitle1" sx={{ mb: 1 }}>
-            Exit Parameters
-          </Typography>
-          <div style={{ display: 'flex', gap: 16, minHeight: 80 }}>
-            {[0,1,2,3].map((i) => {
-              const exitKeys = Object.keys(exitParameters);
-              const key = exitKeys[i];
-              // Placeholder names for parameters
-              const paramNames = ['ShortPeriod', 'LongPeriod', 'Threshold', 'Multiplier'];
-              return key ? (
-                <div key={key} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <Typography className="strategy-subtitle" variant="caption" sx={{ mb: 0 }}>
-                    {paramNames[i]}
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    value={exitParameters[key]}
-                    placeholder={`Will be changed later: ${key}`}
-                    onChange={(e) => setExitParameters({
-                      ...exitParameters,
-                      [key]: Number(e.target.value),
-                    })}
-                  />
-                </div>
-              ) : (
-                <div key={i} style={{ flex: 1 }} />
-              );
-            })}
-          </div>
-        </div>
-        {/* Buttons */}
-        <div className="full-width-item" style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
+        <Typography variant="h6" className="strategy-title">
+          {isEditing ? 'Strategie bearbeiten' : 'Neue Strategie erstellen'}
+        </Typography>
+
+        <TextField
+          label="Strategiename"
+          fullWidth
+          required
+          value={strategyName}
+          onChange={(e) => setStrategyName(e.target.value)}
+        />
+
+        <Box display="flex" gap={2} mt={2}>
+          <FormControl fullWidth required>
+            <InputLabel>Entry-Strategietyp</InputLabel>
+            <Select
+              value={selectedEntry?.id || ""}
+              onChange={(e) => {
+                const id = Number(e.target.value);
+                const found = data?.entryStrategies.find((s) => s.id === id) || null;
+                setSelectedEntry(found);
+                setEntryParams({});
+              }}
+              label="Entry-Strategietyp"
+            >
+              {data?.entryStrategies.map((s) => (
+                <MenuItem key={s.id} value={s.id}>
+                  {s.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth required>
+            <InputLabel>Exit-Strategietyp</InputLabel>
+            <Select
+              value={selectedExit?.id || ""}
+              onChange={(e) => {
+                const id = Number(e.target.value);
+                const found = data?.exitStrategies.find((s) => s.id === id) || null;
+                setSelectedExit(found);
+                setExitParams({});
+              }}
+              label="Exit-Strategietyp"
+            >
+              {data?.exitStrategies.map((s) => (
+                <MenuItem key={s.id} value={s.id}>
+                  {s.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {selectedEntry && (
+          <Box mt={3}>
+            <Typography variant="subtitle1">Entry-Parameter</Typography>
+            <Box display="flex" gap={2} flexWrap="wrap" mt={1}>
+              {selectedEntry.params.map((param) => (
+                <TextField
+                  key={param.id}
+                  label={param.key}
+                  type={param.inputType}
+                  fullWidth
+                  value={entryParams[param.key] || ""}
+                  onChange={(e) => handleParamChange("entry", param.key, e.target.value)}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {selectedExit && (
+          <Box mt={3}>
+            <Typography variant="subtitle1">Exit-Parameter</Typography>
+            <Box display="flex" gap={2} flexWrap="wrap" mt={1}>
+              {selectedExit.params.map((param) => (
+                <TextField
+                  key={param.id}
+                  label={param.key}
+                  type={param.inputType}
+                  fullWidth
+                  value={exitParams[param.key] || ""}
+                  onChange={(e) => handleParamChange("exit", param.key, e.target.value)}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        <Box display="flex" gap={2} mt={4}>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary" 
+            fullWidth={!isEditing} 
+            disabled={isSubmitting}
             className="save-btn"
-            sx={{ background: isEditing ? undefined : undefined }}
           >
-            {isEditing ? 'Update Strategy' : 'Save Strategy'}
+            {isSubmitting ? <CircularProgress size={24} /> : isEditing ? "Strategie updaten" : "Strategie speichern"}
           </Button>
-          {isEditing && onCancelEdit && (
-            <Button
-              variant="contained"
-              color="primary"
+          {isEditing && onCancel && (
+            <Button 
+              onClick={onCancel} 
+              variant="outlined" 
+              color="secondary" 
               fullWidth
               className="cancel-btn"
-              onClick={onCancelEdit}
             >
-              Cancel
+              Abbrechen
             </Button>
           )}
-        </div>
+        </Box>
+
+        {error && (
+          <Typography color="error" mt={2}>
+            Fehler: {error}
+          </Typography>
+        )}
+        {success && (
+          <Typography color="green" mt={2}>
+            Strategie erfolgreich gespeichert!
+          </Typography>
+        )}
       </form>
     </div>
   );
-} 
+}

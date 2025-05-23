@@ -9,24 +9,10 @@ import { useSimulationData } from '../hooks/useSimulationData';
 import { SimulationRequest, Trade, SimulationResponse } from '../types/simulation';
 import { fetchSimulation } from '../services/simulation';
 import './SimulationPage.css';
+import { useAvailableStrategies } from '../hooks/useAvailableStrategies';
 
-// Testdaten für UI-Steuerung
-const TEST_STRATEGIES = [
-  {
-    name: 'Test Strategy',
-    entryStrategy: 'MOMENTUM',
-    exitStrategy: 'TARGET_PROFIT',
-    entryParameters: { short: 10, long: 30 },
-    exitParameters: { threshold: 0.05, multiplier: 2 },
-  },
-  {
-    name: 'test3',
-    entryStrategy: 'BUY_THE_DIP',
-    exitStrategy: 'TRAILING_STOP',
-    entryParameters: { short: 5, long: 15 },
-    exitParameters: { threshold: 0.02, multiplier: 1.5 },
-  },
-];
+
+
 
 export default function SimulationPage() {
   const [strategyA, setStrategyA] = useState('');
@@ -35,41 +21,62 @@ export default function SimulationPage() {
   const [symbol, setSymbol] = useState('AAPL');
   const [simulationStarted, setSimulationStarted] = useState(false);
   const [selectedChart, setSelectedChart] = useState<ChartType>('equity');
+  const {
+    strategies: availableStrategies,
+    isLoading: loadingStrategies,
+    error: strategiesError,
+    refetch: refetchStrategies,
+  } =useAvailableStrategies();
 
   // Request nur bei gestarteter Simulation generieren
-  const buildRequest = (): SimulationRequest | null => {
-    const stratA = TEST_STRATEGIES.find((s) => s.name === strategyA);
-    const stratB = TEST_STRATEGIES.find((s) => s.name === strategyB);
-    if (!stratA || !stratB) return null;
+const buildRequest = (): SimulationRequest | null => {
+  const stratA = availableStrategies.find((s) => s.strategyName === strategyA);
+  const stratB = availableStrategies.find((s) => s.strategyName === strategyB);
+  if (!stratA || !stratB) return null;
 
-    const [startDate, endDate] = timeframe.split('-').map((d) => {
-      const [day, month, year] = d.trim().split('.');
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    });
+  console.log(stratA);
 
-    return {
-      symbol,
-      startDate,
-      endDate,
-      investmentPerTrade: 100.0,
-      requestStrategies: [
-        {
-          strategyName: stratA.name,
-          entryStrategyType: stratA.entryStrategy,
-          exitStrategyType: stratA.exitStrategy,
-          entryParams: stratA.entryParameters,
-          exitParams: stratA.exitParameters,
-        },
-        {
-          strategyName: stratB.name,
-          entryStrategyType: stratB.entryStrategy,
-          exitStrategyType: stratB.exitStrategy,
-          entryParams: stratB.entryParameters,
-          exitParams: stratB.exitParameters,
-        },
-      ],
-    };
+  const [start, end] = timeframe.split("-").map((d) => {
+    const [day, month, year] = d.trim().split(".");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  });
+
+const convertParamArrayToObject = (
+  paramArray: { key: string; value: string }[]
+): Record<string, number> => {
+  const result: Record<string, number> = {};
+  for (const param of paramArray) {
+    const num = parseFloat(param.value);
+    if (!isNaN(num)) {
+      result[param.key] = num;
+    }
+  }
+  return result;
+};
+
+  return {
+    symbol,
+    startDate: start,
+    endDate: end,
+    investmentPerTrade: 100,
+    requestStrategies: [
+      {
+        strategyName: stratA.strategyName,
+        entryStrategyType: stratA.entryStrategyName,
+        exitStrategyType: stratA.exitStrategyName,
+        entryParams: convertParamArrayToObject(stratA.entryParams),
+        exitParams: convertParamArrayToObject(stratA.exitParams),
+      },
+      {
+        strategyName: stratB.strategyName,
+        entryStrategyType: stratB.entryStrategyName,
+        exitStrategyType: stratB.exitStrategyName,
+        entryParams: convertParamArrayToObject(stratB.entryParams),
+        exitParams: convertParamArrayToObject(stratB.exitParams),
+      },
+    ],
   };
+};
 
   const request = simulationStarted ? buildRequest() : null;
   const [data, refetch] = useSimulationData(request);
@@ -77,6 +84,8 @@ export default function SimulationPage() {
   const handleStart = () => {
     setSimulationStarted(true);
     refetch();
+    
+    console.log("Simulation Request:", buildRequest());
   };
 
   const handleTimeframeChange = (newTimeframe: string) => {
@@ -95,12 +104,13 @@ export default function SimulationPage() {
     { date: t.exitDate, type: "SELL", price: t.exitPrice },
   ]);
 }
+console.log("Loaded strategies:", availableStrategies);
 
   return (
     <div className="simulation-root">
       <div className="simulation-paper">
         <SimulationControlBar
-          strategies={TEST_STRATEGIES}
+          strategies={availableStrategies.map(s => ({ name: s.strategyName }))}
           strategyA={strategyA}
           strategyB={strategyB}
           onStrategyAChange={setStrategyA}

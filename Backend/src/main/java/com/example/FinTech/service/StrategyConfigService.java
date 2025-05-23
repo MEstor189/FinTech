@@ -76,6 +76,50 @@ public class StrategyConfigService {
         return mapper.toDTO(savedConfig);
     }
 
+    @Transactional
+    public void deleteStrategyById(Long id) {
+        StrategyConfig config = configRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Strategy with ID " + id + " not found"));
+
+        paramValueRepo.deleteAll(config.getParamValues());
+
+        configRepo.delete(config);
+    }
+
+    @Transactional
+    public StrategyConfigRequest updateStrategy(Long id, CreateStrategyRequest newData) {
+        StrategyConfig existing = configRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Strategy with ID " + id + " not found"));
+
+        
+        EntryStrategyTypeEntity entry = getEntryStrategyOrThrow(newData.getEntryStrategyTypeId());
+        ExitStrategyTypeEntity exit = getExitStrategyOrThrow(newData.getExitStrategyTypeId());
+
+        existing.setName(newData.getName());
+        existing.setEntryStrategy(entry);
+        existing.setExitStrategy(exit);
+        existing.setCreatedAt(LocalDateTime.now());
+
+        
+        paramValueRepo.deleteAll(existing.getParamValues());
+
+        List<StrategyParamValue> newParams = newData.getParamValues().stream()
+                .map(p -> {
+                    StrategyParamKey key = getParamKeyOrThrow(p.getParamKeyId());
+                    StrategyParamValue val = new StrategyParamValue();
+                    val.setConfig(existing);
+                    val.setParamKey(key);
+                    val.setValue(p.getValue());
+                    return val;
+                })
+                .toList();
+
+        paramValueRepo.saveAll(newParams);
+        existing.setParamValues(newParams);
+
+        return mapper.toDTO(existing);
+    }
+
     public List<StrategyConfigRequest> getAllStrategies() {
         return configRepo.findAll().stream()
                 .map(mapper::toDTO)

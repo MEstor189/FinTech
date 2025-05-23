@@ -2,98 +2,63 @@ import React, { useState } from 'react';
 import StrategyCreator from '../components/strategyCreator/StrategyCreator';
 import StrategyList from '../components/strategyList/StrategyList';
 import './StrategiesPage.css';
-
-const TEST_STRATEGY = {
-  name: 'Test Strategy',
-  entryStrategy: 'MOMENTUM',
-  exitStrategy: 'TARGET_PROFIT',
-  entryParameters: { short: 10, long: 30 },
-  exitParameters: { threshold: 0.05, multiplier: 2 },
-};
-
-const TEST_STRATEGY_2 = {
-  name: 'test3',
-  entryStrategy: 'BUY_THE_DIP',
-  exitStrategy: 'TRAILING_STOP',
-  entryParameters: { short: 5, long: 15 },
-  exitParameters: { threshold: 0.02, multiplier: 1.5 },
-};
+import { useAvailableStrategies } from '../hooks/useAvailableStrategies';
+import { StrategyConfigRequest } from '../types/strategies';
+import { Box } from '@mui/material';
+import StrategyTypeInfoList from '../components/strategyInfo/StrategyTypeInfoList';
+import { deleteStrategy, updateStrategy } from '../hooks/useStrategyAction';
 
 export default function StrategiesPage() {
-  const [strategies, setStrategies] = useState<any[]>([TEST_STRATEGY, TEST_STRATEGY_2]);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editStrategy, setEditStrategy] = useState<StrategyConfigRequest | null>(null);
+  const { strategies: allStrategies, refetch } = useAvailableStrategies();
 
-  const handleCreate = (strategy: any) => {
-    if (editIndex !== null) {
-      // Update mode
-      const updated = [...strategies];
-      updated[editIndex] = strategy;
-      setStrategies(updated);
-      setEditIndex(null);
-    } else {
-      // Add new
-      setStrategies([...strategies, strategy]);
-    }
+  const handleCreated = () => {
+    setEditStrategy(null);
+    refetch();
   };
 
-  const handleEdit = (index: number) => {
-    setEditIndex(index);
+  const handleEdit = (strategy: StrategyConfigRequest) => {
+    setEditStrategy(strategy);
   };
 
-  const handleDelete = (index: number) => {
-    setStrategies(strategies.filter((_, i) => i !== index));
-    if (editIndex === index) setEditIndex(null);
-  };
+  const handleDelete = async (strategy: StrategyConfigRequest) => {
+  try {
+    await deleteStrategy(strategy.id);
+    refetch();
+  } catch (err) {
+    console.error("Fehler beim Löschen:", err);
+  }
+};
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: '24px 0',
-        boxSizing: 'border-box',
-        background: '#181925',
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 800,
-          background: '#181925',
-          borderRadius: 16,
-          padding: 32,
-          marginBottom: 32,
-          boxSizing: 'border-box',
-        }}
-      >
-        <StrategyCreator
-          onStrategyCreate={handleCreate}
-          editStrategy={editIndex !== null ? strategies[editIndex] : null}
-          isEditing={editIndex !== null}
-          onCancelEdit={() => setEditIndex(null)}
-        />
-      </div>
-      <div
-        style={{
-          width: '100vw',
-          background: '#181925',
-          borderRadius: 16,
-          padding: 24,
+    <div id='main-container'>
+      <Box display="flex" width="100%" justifyContent="space-between">
+        <Box flex={1} width="25%" height="auto">
+          <StrategyTypeInfoList direction="entry" />
+        </Box>
 
-          boxSizing: 'border-box',
-        }}
-      >
+        <Box flex={2} width="50%">
+          <StrategyCreator
+            onCreated={handleCreated}
+            editStrategy={editStrategy}
+            isEditing={!!editStrategy}
+            onCancel={() => setEditStrategy(null)}
+          />
+        </Box>
+
+        <Box flex={1} width="25%" height="auto">
+          <StrategyTypeInfoList direction="exit" />
+        </Box>
+      </Box>
+
+      <div id='list'>
         <StrategyList
-          strategies={strategies}
+          strategies={allStrategies}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          wide
+          wide={true}
         />
       </div>
     </div>
   );
-} 
+}

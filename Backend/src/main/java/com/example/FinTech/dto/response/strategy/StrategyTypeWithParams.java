@@ -15,4 +15,5 @@ public class StrategyTypeWithParams {
     private Long id;
     private String name;
     private List<ParamKey> params;
+    private String description;
 }

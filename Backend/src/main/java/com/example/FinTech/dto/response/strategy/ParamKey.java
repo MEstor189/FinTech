@@ -13,4 +13,5 @@ public class ParamKey {
     private Long id;
     private String key;
     private String type;
+    private String description;
 }

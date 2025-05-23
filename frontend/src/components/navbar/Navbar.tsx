@@ -28,43 +28,28 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar
-      position="fixed"
-      color="transparent"
-      elevation={1}
-      sx={{
-        background: '#13141a',
-        width: '100vw',
-        left: 0,
-        top: 0,
-        borderRadius: 0,
-        m: 0,
-        zIndex: 1201,
-      }}
-    >
-      <Toolbar sx={{ justifyContent: 'space-between', minHeight: 64 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+    <AppBar position="fixed" className="navbar-root" elevation={1}>
+      <Toolbar className="navbar-toolbar">
+        <Box className="navbar-logo-group">
           <HexagonIcon sx={{ color: 'purple', fontSize: 32 }} />
-          <Typography variant="h6" sx={{ fontWeight: 700, color: 'white', letterSpacing: 1 }}>
+          <Typography variant="h6" className="navbar-title">
             FinTech
           </Typography>
         </Box>
+
         <Tabs
           value={currentTab}
           onChange={handleTabChange}
           textColor="inherit"
-          TabIndicatorProps={{ style: { background: 'linear-gradient(90deg, #a259ff, #3772ff)' } }}
-          sx={{
-            '.MuiTab-root': { color: 'white', fontWeight: 500, fontSize: 16, minWidth: 120 },
-            '.Mui-selected': { color: '#a259ff !important' },
-            mr: 2
-          }}
+          TabIndicatorProps={{ className: 'navbar-tab-indicator' }}
+          className="navbar-tabs"
         >
-          <Tab label="Simulation" />
-          <Tab label="Strategies" />
-          <Tab label="Information" />
+          <Tab label="Simulation" className="navbar-tab" />
+          <Tab label="Strategies" className="navbar-tab" />
+          <Tab label="Information" className="navbar-tab" />
         </Tabs>
-        <IconButton edge="end" sx={{ color: 'white' }}>
+
+        <IconButton edge="end" className="navbar-icon">
           <MenuIcon />
         </IconButton>
       </Toolbar>
