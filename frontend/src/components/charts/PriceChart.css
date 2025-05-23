@@ -12,3 +12,18 @@
     text-align: center;
     margin-bottom: 18px;
   }
+
+  .recharts-tooltip-wrapper {
+  z-index: 999;
+  pointer-events: none;
+}
+
+.recharts-default-tooltip {
+  background-color: #1c1c2e !important;
+  border: 1px solid #444 !important;
+  border-radius: 8px;
+  color: #e0e0ff;
+  padding: 10px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}

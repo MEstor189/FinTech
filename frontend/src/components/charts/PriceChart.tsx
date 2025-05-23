@@ -1,59 +1,87 @@
 import React from "react";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Scatter
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Scatter,
+  Brush
 } from "recharts";
 import './PriceChart.css';
+import { Trade } from "../../types/simulation";
+import CustomTooltip from "./CustomTooltip";
 
 type PricePoint = {
   date: string;
   close: number;
 };
 
-type Trade = {
+type MarkerPoint = {
   date: string;
-  type: "BUY" | "SELL";
   price: number;
+  type: "BUY" | "SELL";
+  trade: Trade;
 };
-
-type MovingAverage = { date: string; value: number };
 
 interface PriceChartProps {
   priceSeries: PricePoint[];
-  trades: Trade[];
-  movingAverages?: {
-    short?: MovingAverage[];
-    long?: MovingAverage[];
-  };
+  markers: MarkerPoint[];
   height?: number;
 }
 
-const PriceChart: React.FC<PriceChartProps> = ({ priceSeries, trades, movingAverages, height = 400 }) => {
-  const mergedData = priceSeries.map((p) => ({
-    ...p,
-    shortMA: movingAverages?.short?.find((ma) => ma.date === p.date)?.value,
-    longMA: movingAverages?.long?.find((ma) => ma.date === p.date)?.value,
-  }));
+const PriceChart: React.FC<PriceChartProps> = ({ priceSeries, markers, height = 400 }) => {
 
-  const buyPoints = trades.filter((t) => t.type === "BUY");
-  const sellPoints = trades.filter((t) => t.type === "SELL");
+  const mergedData = priceSeries.map((p) => {
+    const buy = markers.filter(t => t.date === p.date && t.type === "BUY");
+    const sell = markers.filter(t => t.date === p.date && t.type === "SELL");
 
+    return {
+      ...p,
+      buyMarkers: buy.map(b => b.trade),
+      sellMarkers: sell.map((s => s.trade)),
+    };
+  });
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={mergedData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
+        <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+
+        <XAxis
+          dataKey="date"
+          tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
+          axisLine={{ stroke: "#444" }}
+          tickLine={{ stroke: "#444" }}
+        />
+        <YAxis
+          tick={{ fill: "#a259ff", fontWeight: 300, fontSize: 12, letterSpacing: 0 }}
+          axisLine={{ stroke: "#444" }}
+          tickLine={{ stroke: "#444" }}
+          domain={['dataMin - 10', 'dataMax + 10']}
+        />
+        <Tooltip content={<CustomTooltip />} />
         <Legend />
         <Line type="monotone" dataKey="close" stroke="#8884d8" name="Kurs" dot={false} />
-        {movingAverages?.short && (
-          <Line type="monotone" dataKey="shortMA" stroke="#00c49f" name="Short MA" dot={false} />
-        )}
-        {movingAverages?.long && (
-          <Line type="monotone" dataKey="longMA" stroke="#ff7300" name="Long MA" dot={false} />
-        )}
-        <Scatter data={buyPoints} fill="green" shape="circle" name="Buy" />
-        <Scatter data={sellPoints} fill="red" shape="circle" name="Sell" />
+        <Line
+          type="monotone"
+          dataKey="buyMarkers[0].entryPrice"
+          stroke="green"
+          name="BUY"
+          dot={{ r: 5 }}
+          activeDot={false}
+          isAnimationActive={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="sellMarkers[0].exitPrice"
+          stroke="red"
+          name="SELL"
+          dot={{ r: 5 }}
+          activeDot={false}
+          isAnimationActive={false}
+        />
+        <Brush
+          dataKey="date"
+          height={30}
+          stroke="#a259ff"
+          travellerWidth={20}
+          fill="#23243a"
+        />
       </LineChart>
     </ResponsiveContainer>
   );
