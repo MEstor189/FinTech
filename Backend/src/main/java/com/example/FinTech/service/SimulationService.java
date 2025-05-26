@@ -2,6 +2,7 @@ package com.example.FinTech.service;
 
 import com.example.FinTech.dto.request.SimulationRequestStrategy;
 import com.example.FinTech.dto.stock.StockDataDTO;
+import com.example.FinTech.exceptions.NotFoundException;
 import com.example.FinTech.mapper.StockDataMapper;
 import com.example.FinTech.persistence.entity.StockData;
 import com.example.FinTech.persistence.repository.StockDataRepository;
@@ -34,6 +35,10 @@ public class SimulationService {
         logger.info("Starting simulation for symbol {} using EntryStrategy {} and ExitStrategy {}", symbol,
                 request.getEntryStrategyType(),request.getExitStrategyType());
 
+        if(sDate.isAfter(eDate)){
+            logger.warn("Startdate {} after EndDate {}", sDate,eDate);
+        };
+
         // 1. get data from DB
         List<StockData> dataList = stockDataRepository.findAllBySymbolAndTradeDateBetweenOrderByTradeDateAsc(
                 symbol,
@@ -43,7 +48,7 @@ public class SimulationService {
         if (dataList.isEmpty()) {
             logger.warn("No stock data found for {} between {} and {}", symbol, sDate,
                     eDate);
-            throw new IllegalArgumentException("No data available for the selected period and symbol.");
+            throw new NotFoundException("Keine Kursdaten für dieses Symbol im gewählten Zeitraum.");
         }
 
         // 2. Data in Map<LocalDate, StockData>

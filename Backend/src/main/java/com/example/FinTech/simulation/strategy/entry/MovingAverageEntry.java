@@ -26,20 +26,23 @@ public class MovingAverageEntry implements EntryStrategy {
     @Override
     public boolean shouldEnter(StockData today) {
         LocalDate currentDate = today.getTradeDate();
-
         LocalDate yesterday = currentDate.minusDays(1);
 
-        double shortAvgToday = MovingAverageUtil.calculateAverage(currentDate, shortPeriod, historicalData);
-        double longAvgToday = MovingAverageUtil.calculateAverage(currentDate, longPeriod, historicalData);
-        double shortAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, shortPeriod, historicalData);
-        double longAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, longPeriod, historicalData);
+        Double shortAvgToday = MovingAverageUtil.calculateAverage(currentDate, shortPeriod, historicalData);
+        Double longAvgToday = MovingAverageUtil.calculateAverage(currentDate, longPeriod, historicalData);
+        Double shortAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, shortPeriod, historicalData);
+        Double longAvgYesterday = MovingAverageUtil.calculateAverage(yesterday, longPeriod, historicalData);
 
-/*         if (shortAvgToday == null || longAvgToday == null || shortAvgYesterday == null || longAvgYesterday == null) {
+        if (shortAvgToday == null || longAvgToday == null || shortAvgYesterday == null || longAvgYesterday == null) {
+            logger.warn("MA not computable – missing historical data");
             return false;
-        } */
+        }
 
-        logger.info("DAY: {} | shortY: {} longY: {} | shortT: {} longT: {}", 
-                    currentDate, shortAvgYesterday, longAvgYesterday, shortAvgToday, longAvgToday);
+        logger.info("📊 MA DEBUG | {} | shortY: {} | longY: {} | shortT: {} | longT: {}",
+                currentDate, shortAvgYesterday, longAvgYesterday, shortAvgToday, longAvgToday);
+        System.out.println("🧮 Vergleich:");
+        System.out.println("shortY <= longY: " + (shortAvgYesterday <= longAvgYesterday));
+        System.out.println("shortT > longT: " + (shortAvgToday > longAvgToday));
 
         return shortAvgYesterday <= longAvgYesterday && shortAvgToday > longAvgToday;
     }

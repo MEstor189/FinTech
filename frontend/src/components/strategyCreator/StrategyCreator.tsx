@@ -30,16 +30,16 @@ export default function StrategyCreator({ onCreated, editStrategy, isEditing, on
   const [strategyName, setStrategyName] = useState(editStrategy?.strategyName || "");
   const [selectedEntry, setSelectedEntry] = useState<StrategyTypeWithParams | null>(null);
   const [selectedExit, setSelectedExit] = useState<StrategyTypeWithParams | null>(null);
-  const [entryParams, setEntryParams] = useState<Record<string, string>>({});
-  const [exitParams, setExitParams] = useState<Record<string, string>>({});
+  const [entryParams, setEntryParams] = useState<Record<string, string | number>>({});
+  const [exitParams, setExitParams] = useState<Record<string, string | number>>({});
 
   useEffect(() => {
     if (editStrategy && data) {
       setStrategyName(editStrategy.strategyName);
-      
+
       const entryType = data.entryStrategies.find(s => s.name === editStrategy.entryStrategyName);
       const exitType = data.exitStrategies.find(s => s.name === editStrategy.exitStrategyName);
-      
+
       if (entryType) {
         setSelectedEntry(entryType);
         const entryParamsMap: Record<string, string> = {};
@@ -48,7 +48,7 @@ export default function StrategyCreator({ onCreated, editStrategy, isEditing, on
         });
         setEntryParams(entryParamsMap);
       }
-      
+
       if (exitType) {
         setSelectedExit(exitType);
         const exitParamsMap: Record<string, string> = {};
@@ -63,7 +63,7 @@ export default function StrategyCreator({ onCreated, editStrategy, isEditing, on
   const handleParamChange = (
     type: "entry" | "exit",
     key: string,
-    value: string
+    value: string | number
   ) => {
     if (type === "entry") {
       setEntryParams({ ...entryParams, [key]: value });
@@ -72,39 +72,40 @@ export default function StrategyCreator({ onCreated, editStrategy, isEditing, on
     }
   };
 
-  const buildParamValues = (params: ParamKey[], values: Record<string, string>) => {
+  const buildParamValues = (params: ParamKey[], values: Record<string, string | number>) => {
     return params.map((param) => ({
       paramKeyId: param.id,
       value: values[param.key],
     }));
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!selectedEntry || !selectedExit) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEntry || !selectedExit) return;
 
-  const request = {
-    name: strategyName,
-    entryStrategyTypeId: selectedEntry.id,
-    exitStrategyTypeId: selectedExit.id,
-    paramValues: [
-      ...buildParamValues(selectedEntry.params, entryParams),
-      ...buildParamValues(selectedExit.params, exitParams),
-    ],
+    const request = {
+      name: strategyName,
+      entryStrategyTypeId: selectedEntry.id,
+      exitStrategyTypeId: selectedExit.id,
+      paramValues: [
+        ...buildParamValues(selectedEntry.params, entryParams),
+        ...buildParamValues(selectedExit.params, exitParams),
+      ],
+    };
+
+    try {
+      if (isEditing && editStrategy?.id) {
+        await updateStrategy(editStrategy.id, request);
+      } else {
+        await create(request);
+      }
+
+      if (onCreated) onCreated();
+    } catch (err) {
+      console.error("Fehler beim Speichern:", err);
+    }
   };
 
-  try {
-    if (isEditing && editStrategy?.id) {
-      await updateStrategy(editStrategy.id, request); 
-    } else {
-      await create(request);
-    }
-
-    if (onCreated) onCreated();
-  } catch (err) {
-    console.error("Fehler beim Speichern:", err);
-  }
-};
 
   if (loadingTypes) return <div>Lade Strategietypen...</div>;
 
@@ -173,10 +174,20 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <TextField
                   key={param.id}
                   label={param.key}
-                  type={param.inputType}
+                  type="number"
                   fullWidth
-                  value={entryParams[param.key] || ""}
-                  onChange={(e) => handleParamChange("entry", param.key, e.target.value)}
+                  value={entryParams[param.key] ?? ""}
+                  inputProps={{ step: param.type === "int" ? 1 : "any" }}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw === "") return handleParamChange("entry", param.key, "");
+
+                    const parsed =
+                      param.type === "int" ? parseInt(raw) : parseFloat(raw);
+                    if (!isNaN(parsed)) {
+                      handleParamChange("entry", param.key, parsed);
+                    }
+                  }}
                 />
               ))}
             </Box>
@@ -191,10 +202,20 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <TextField
                   key={param.id}
                   label={param.key}
-                  type={param.inputType}
+                  type="number"
                   fullWidth
-                  value={exitParams[param.key] || ""}
-                  onChange={(e) => handleParamChange("exit", param.key, e.target.value)}
+                  value={exitParams[param.key] ?? ""}
+                  inputProps={{ step: param.type === "int" ? 1 : "any" }}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw === "") return handleParamChange("exit", param.key, "");
+
+                    const parsed =
+                      param.type === "int" ? parseInt(raw) : parseFloat(raw);
+                    if (!isNaN(parsed)) {
+                      handleParamChange("exit", param.key, parsed);
+                    }
+                  }}
                 />
               ))}
             </Box>
@@ -202,21 +223,21 @@ const handleSubmit = async (e: React.FormEvent) => {
         )}
 
         <Box display="flex" gap={2} mt={4}>
-          <Button 
-            type="submit" 
-            variant="contained" 
-            color="primary" 
-            fullWidth={!isEditing} 
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth={!isEditing}
             disabled={isSubmitting}
             className="save-btn"
           >
             {isSubmitting ? <CircularProgress size={24} /> : isEditing ? "Strategie updaten" : "Strategie speichern"}
           </Button>
           {isEditing && onCancel && (
-            <Button 
-              onClick={onCancel} 
-              variant="outlined" 
-              color="secondary" 
+            <Button
+              onClick={onCancel}
+              variant="outlined"
+              color="secondary"
               fullWidth
               className="cancel-btn"
             >

@@ -2,7 +2,7 @@ export interface ParamKey {
   id: number;
   key: string;
   type: string; 
-  inputType: "text" | "number" | "checkbox"; 
+  inputType: "number" /* | "number" | "checkbox" */; 
   description?: string;
 }
 
@@ -27,7 +27,7 @@ export interface CreateStrategyRequest {
   exitStrategyTypeId: number;
   paramValues: {
     paramKeyId: number;
-    value: string;
+    value: string | number;
   }[];
 }
 // Einzelne gespeicherte Strategie

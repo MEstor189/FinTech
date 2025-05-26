@@ -33,7 +33,7 @@ public class MarketDataService {
         this.alpacaAPI = alpacaClientFactory.getAlpacaAPI();
     }
 
-    public void getAndSaveAllBars() {
+    public void getAndSaveAllBars(String symbol) {
         try {
             LocalDate today = LocalDate.now();
             LocalDate threeYearsAgo = today.minusYears(3);
@@ -42,7 +42,7 @@ public class MarketDataService {
             OffsetDateTime endDateTime = today.atStartOfDay().atOffset(ZoneOffset.UTC);
 
             List<StockData> stockDataList = new ArrayList<>();
-            StockBarsRespSingle response = alpacaAPI.marketData().stock().stockBarSingle("AAPL", "1Day", startDateTime,
+            StockBarsRespSingle response = alpacaAPI.marketData().stock().stockBarSingle(symbol, "1Day", startDateTime,
                     endDateTime, null, null, null, null, null, null, null);
             if (response.getBars() != null) {
                 response.getBars().forEach(bar -> {

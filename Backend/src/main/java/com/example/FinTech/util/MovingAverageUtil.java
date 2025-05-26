@@ -1,20 +1,29 @@
 package com.example.FinTech.util;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.example.FinTech.persistence.entity.StockData;
 
 public class MovingAverageUtil {
-public static double calculateAverage(LocalDate endDate, int period, Map<LocalDate, StockData> data) {
-    return data.entrySet().stream()
-        .filter(e -> !e.getKey().isAfter(endDate))
-        .sorted((e1, e2) -> e2.getKey().compareTo(e1.getKey())) // Neueste zuerst
-        .limit(period)
-        .mapToDouble(e -> e.getValue().getClosePrice().doubleValue())
-        .average()
-        .orElse(0.0);
-}
+    
+    public static Double calculateAverage(LocalDate endDate, int period, Map<LocalDate, StockData> data) {
+        List<Double> values = data.entrySet().stream()
+            .filter(e -> !e.getKey().isAfter(endDate))
+            .sorted(Map.Entry.comparingByKey()) // Älteste zuerst (für Klarheit, optional)
+            .map(e -> e.getValue().getClosePrice().doubleValue())
+            .collect(Collectors.toList());
+
+        if (values.size() < period) {
+            return null; // ❗️Nicht genug Daten vorhanden
+        }
+
+        // Die letzten X Werte nehmen
+        List<Double> lastN = values.subList(values.size() - period, values.size());
+        return lastN.stream().mapToDouble(Double::doubleValue).average().orElseThrow();
+    }
 
     public static LocalDate getPreviousTradingDay(LocalDate current, Map<LocalDate, StockData> data) {
         return data.keySet().stream()

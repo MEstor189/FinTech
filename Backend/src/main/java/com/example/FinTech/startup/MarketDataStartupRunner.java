@@ -27,6 +27,7 @@ public class MarketDataStartupRunner implements CommandLineRunner {
         logger.info("Starte MarketData Abruf...");
 
         //marketDataService.getAndSaveAllBars();
+        marketDataService.updateAndSaveNewBars("AAPL");
         
         logger.info("MarketData Abruf abgeschlossen!");
     }
